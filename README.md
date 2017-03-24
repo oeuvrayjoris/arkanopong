@@ -5,7 +5,7 @@ Development in C.
 ### Setup
 
 ```sh
-$ git clone
+$ git clone https://github.com/oeuvrayjoris/kbukxyzyxq.git
 $ cd kbukxyzyxq/src
 $ make
 $ ./main
