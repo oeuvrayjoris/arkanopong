@@ -1,6 +1,6 @@
 # kbukxyzyxq
 
-Development in C.
+Development in C
 
 ### Setup
 
