@@ -1,8 +1,8 @@
 # kbukxyzyxq
 
-Development in C
+Game development
 
-### Setup
+## Setup
 
 ```sh
 $ git clone https://github.com/oeuvrayjoris/kbukxyzyxq.git
@@ -11,7 +11,11 @@ $ make
 $ ./main
 ```
 
-### Tech
+## Tech
 
 * [OpenGL](https://www.opengl.org)
 * [SDL](https://www.libsdl.org)
+
+## Language
+
+- C
