@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <SDL/SDL_image.h>
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
@@ -77,8 +78,10 @@ void draw_rounded_square(int full, float radius) {
 void draw_circle(int full) {
   glBegin(full ? GL_POLYGON : GL_LINE_LOOP);
   float j;
-  for(j=0; j<2*M_PI; j+=0.01)
+  for(j=0; j<2*M_PI; j+=0.01) {
+    glTexCoord2f(cos(j)+0.5, sin(j)+0.5);
     glVertex2f(cos(j), sin(j));
+  }
   glEnd();
 }
 
@@ -122,6 +125,42 @@ int main(int argc, char** argv) {
 
   SDL_WM_SetCaption("Arkanopong", NULL);
 
+  /* TEXTURE DE LA BALLE */
+  GLuint textureBalle;
+
+  SDL_Surface *image = IMG_Load("images/balle.jpg");
+  if(image == NULL)
+    printf("Erreur, l'image n'a pas pu être chargée\n");
+
+  glGenTextures(1, &textureBalle);
+  glBindTexture(GL_TEXTURE_2D, textureBalle);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, textureBalle);
+
+  GLenum format;
+    switch(image->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      /* Ne g`
+      ere pas les machines big-endian (`
+      a confirmer...) */
+      format = GL_RGB;
+      break;
+    case 4:
+      /* Ne g`
+      ere pas les machines big-endian (`
+      a confirmer...) */
+      format = GL_RGBA;
+      break;
+    default:
+      /* On ne traite pas les autres cas */
+      return EXIT_FAILURE;
+  }
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, format, GL_UNSIGNED_BYTE, image->pixels);
+
   float rayonBalle = 0.05;
   float posX = -0.3;
   float posY = 0;
@@ -136,23 +175,27 @@ int main(int argc, char** argv) {
     
     glClearColor(255, 255, 255, 1); // Fond en blanc
     glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(0, 0, 0); // Eléments en noir
+    //glColor3f(255, 0, 0); // Eléments en rouge
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureBalle);
 
     /* Affichage de la balle */
     glPushMatrix();
     glTranslatef(posX, posY, 0);
     glScalef(rayonBalle*2, rayonBalle*2, 1);
     draw_circle(1);
+    
     glPopMatrix();
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
 
     SDL_GL_SwapBuffers();
 
     if(posX+rayonBalle >= 1-rayonBalle || posX-rayonBalle <= -1+rayonBalle) {
-        printf("posX %f\n", posX);
         vitesseX *= -1;
     }
     if(posY+rayonBalle >= 1-rayonBalle || posY-rayonBalle <= -1+rayonBalle) {
-        printf("posY %f\n", posY);
         vitesseY *= -1;
     }
 
@@ -191,6 +234,9 @@ int main(int argc, char** argv) {
       SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
     }
   }
+
+  glDeleteTextures(1, &textureBalle);
+  SDL_FreeSurface(image);
   
   SDL_Quit();
   
