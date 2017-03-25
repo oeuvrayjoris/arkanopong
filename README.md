@@ -6,9 +6,9 @@ Game development
 
 ```sh
 $ git clone https://github.com/oeuvrayjoris/kbukxyzyxq.git
-$ cd kbukxyzyxq/src
+$ cd kbukxyzyxq
 $ make
-$ ./main
+$ ./bin/play
 ```
 
 ## Tech
