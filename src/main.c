@@ -138,24 +138,20 @@ int main(int argc, char** argv) {
   glBindTexture(0, textureBalle);
 
   GLenum format;
-    switch(image->format->BytesPerPixel) {
+  switch(image->format->BytesPerPixel) {
     case 1:
       format = GL_RED;
       break;
+
     case 3:
-      /* Ne g`
-      ere pas les machines big-endian (`
-      a confirmer...) */
       format = GL_RGB;
       break;
+
     case 4:
-      /* Ne g`
-      ere pas les machines big-endian (`
-      a confirmer...) */
       format = GL_RGBA;
       break;
+      
     default:
-      /* On ne traite pas les autres cas */
       return EXIT_FAILURE;
   }
 
