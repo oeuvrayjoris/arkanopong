@@ -31,6 +31,7 @@ void setVideoMode(unsigned int width, unsigned int height) {
 
 void draw_square(int full) {
   /** Dessine un carré (plein ou non) de côté 1 et centré en (0, 0). **/
+  glColor3f(0,0,0);
   glBegin(full ? GL_QUADS : GL_LINE_LOOP);
     glVertex2f(-0.5, 0.5);
     glVertex2f(0.5, 0.5);
@@ -163,9 +164,26 @@ int main(int argc, char** argv) {
   float vitesseX = 0.01;
   float vitesseY = 0.01;
 
+  // Variables pour la barre de jeu
+  float barre_1_posY = 0;
+  int barre_1_keyPressed_left = 0;
+  int barre_1_keyPressed_right = 0;
+
+
   int loop = 1;
   while(loop) {
     Uint32 startTime = SDL_GetTicks();
+
+    // Déplacement de la barre de jeu
+    if (barre_1_keyPressed_left) {
+      if (barre_1_posY > -0.75)
+        barre_1_posY -= 0.025; // Vitesse de déplacement
+    }
+    if (barre_1_keyPressed_right) {
+      if (barre_1_posY < 0.75)
+        barre_1_posY += 0.025; // Vitesse de déplacement
+    }
+
 
     /* Dessin */
     
@@ -185,6 +203,13 @@ int main(int argc, char** argv) {
 
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
+
+    /* Affichage de la Barre de jeu */
+    glPushMatrix();
+    glTranslatef(barre_1_posY, -0.9, 0);
+    glScalef(0.5, 0.05, 1);
+    draw_square(1);
+    glPopMatrix();
 
     SDL_GL_SwapBuffers();
 
@@ -218,6 +243,18 @@ int main(int argc, char** argv) {
           if (e.key.keysym.sym == 'q' || e.key.keysym.sym == SDLK_ESCAPE) {
             loop = 0;
           }
+          if (e.key.keysym.sym == SDLK_LEFT) {
+              barre_1_keyPressed_left = e.key.state;
+          }
+          if (e.key.keysym.sym == SDLK_RIGHT) {
+              barre_1_keyPressed_right = e.key.state;
+          }
+          break;
+
+        case SDL_KEYUP:          
+          barre_1_keyPressed_left = e.key.state;
+          barre_1_keyPressed_right = e.key.state;
+
           break;
           
         default:
