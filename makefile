@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -O2 -g
 LDFLAGS = -lSDL -lGLU -lGL -lm -lSDL_image
-INCLUDES = 
+INCLUDES = drawing brick ball bar
 
 APP_BIN = play
 

@@ -6,6 +6,12 @@
 #include <math.h>
 #include <SDL/SDL_image.h>
 
+#include "drawing.h"
+#include "ball.h"
+#include "bar.h"
+#include "brick.h"
+#include "geometry.h"
+
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
@@ -18,100 +24,16 @@ void reshape(unsigned int width, unsigned int height) {
 }
 
 void setVideoMode(unsigned int width, unsigned int height) {
-  if(NULL == SDL_SetVideoMode(width, height, BIT_PER_PIXEL, SDL_OPENGL | SDL_RESIZABLE)) {
+  if(NULL == SDL_SetVideoMode(width, height, BIT_PER_PIXEL, SDL_OPENGL)) {
     fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
     exit(EXIT_FAILURE);
   }
   
-  reshape(width, height);
+  // Fenêtre non redimensionnable
+  //reshape(width, height);
 }
 
-
-/** Fonctions de dessin canonique. **/
-
-void draw_square(int full) {
-  /** Dessine un carré (plein ou non) de côté 1 et centré en (0, 0). **/
-  glColor3f(0,0,0);
-  glBegin(full ? GL_QUADS : GL_LINE_LOOP);
-    glVertex2f(-0.5, 0.5);
-    glVertex2f(0.5, 0.5);
-    glVertex2f(0.5, -0.5);
-    glVertex2f(-0.5, -0.5);
-  glEnd();
-}
-
-void draw_rounded_square(int full, float radius) {
-  /** Dessine un carré (plein ou non) de côté 1 et centré en (0, 0), dont les bords sont arrondis de rayon = radius. **/
-  glBegin(full ? GL_POLYGON : GL_LINES);
-    glVertex2f(-0.5+radius, 0.5);
-    glVertex2f(0.5-radius, 0.5);
-    glVertex2f(0.5, 0.5-radius);
-    glVertex2f(0.5, -0.5+radius);
-    glVertex2f(0.5-radius, -0.5);
-    glVertex2f(-0.5+radius, -0.5);
-    glVertex2f(-0.5, -0.5+radius);
-    glVertex2f(-0.5, 0.5-radius);
-  glEnd();
-
-  float j;
-
-  glBegin(full ? GL_POLYGON : GL_LINE_STRIP);
-  for(j=M_PI/2; j<M_PI; j+=0.01)
-    glVertex2f(-0.5+radius+cos(j)*radius, 0.5-radius+sin(j)*radius);
-  glEnd();
-
-  glBegin(full ? GL_POLYGON : GL_LINE_STRIP);
-  for(j=0; j<M_PI/2; j+=0.01)
-    glVertex2f(0.5-radius+cos(j)*radius, 0.5-radius+sin(j)*radius);
-  glEnd();
-
-  glBegin(full ? GL_POLYGON : GL_LINE_STRIP);
-  for(j=3*M_PI/2; j<2*M_PI; j+=0.01)
-    glVertex2f(0.5-radius+cos(j)*radius, -0.5+radius+sin(j)*radius);
-  glEnd();
-
-  glBegin(full ? GL_POLYGON : GL_LINE_STRIP);
-  for(j=M_PI; j<3*M_PI/2; j+=0.01)
-    glVertex2f(-0.5+radius+cos(j)*radius, -0.5+radius+sin(j)*radius);
-  glEnd();
-}
-
-void draw_circle(int full) {
-  glBegin(full ? GL_POLYGON : GL_LINE_LOOP);
-  float j;
-  for(j=0; j<2*M_PI; j+=0.01) {
-    glTexCoord2f(cos(j)+0.5, sin(j)+0.5);
-    glVertex2f(cos(j), sin(j));
-  }
-  glEnd();
-}
-
-/** ------------------------------ **/
-
-void draw_principal_arm() {
-  /** Dessine le bras principal, à l'horizontal. **/
-
-  glPushMatrix();
-  glTranslatef(0.6, 0, 0);
-  glScalef(0.1, 0.1, 1.0);
-  draw_circle(0);
-  glPopMatrix();
-
-  glPushMatrix();
-  glScalef(0.2, 0.2, 1.0);
-  draw_circle(0);
-  glPopMatrix();
-
-  glBegin(GL_LINES);
-    glVertex2f(0, 0.2);
-    glVertex2f(0.6, 0.1);
-    glVertex2f(0, -0.2);
-    glVertex2f(0.6, -0.1);
-  glEnd();
-
-}
-
-
+/** ------------------------------------------------------------------------------------------------ **/
 
 int main(int argc, char** argv) {
   unsigned int WINDOW_WIDTH = 600;
@@ -169,6 +91,10 @@ int main(int argc, char** argv) {
   int barre_1_keyPressed_left = 0;
   int barre_1_keyPressed_right = 0;
 
+  Point position_barre = PointXY(0, -0.9);
+  Color3D colorBlack = ColorXY(0, 0, 0);
+  Bar myBar = createBar(0.5, 0.05, 1, colorBlack, position_barre);
+  printf("position : %f - %f\n", myBar.position.x, myBar.position.y);
 
   int loop = 1;
   while(loop) {
@@ -210,6 +136,9 @@ int main(int argc, char** argv) {
     glScalef(0.5, 0.05, 1);
     draw_square(1);
     glPopMatrix();
+
+    drawBar(myBar);
+    printf("%f\n", myBar.position.y);
 
     SDL_GL_SwapBuffers();
 
