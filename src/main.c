@@ -87,14 +87,17 @@ int main(int argc, char** argv) {
   float vitesseY = 0.01;
 
   // Variables pour la barre de jeu
-  float barre_1_posY = 0;
   int barre_1_keyPressed_left = 0;
   int barre_1_keyPressed_right = 0;
 
+  // Position de la barre de jeu (du bas)
   Point position_barre = PointXY(0, -0.9);
   Color3D colorBlack = ColorXY(0, 0, 0);
   Bar myBar = createBar(0.5, 0.05, 1, colorBlack, position_barre);
-  printf("position : %f - %f\n", myBar.position.x, myBar.position.y);
+
+  // Vecteurs directeurs de déplacements des barres de jeu
+  Vector vector_to_left = VectorXY(PointXY(0.025,0), PointXY(0,0));
+  Vector vector_to_right = VectorXY(PointXY(0,0), PointXY(0.025,0));
 
   int loop = 1;
   while(loop) {
@@ -102,14 +105,17 @@ int main(int argc, char** argv) {
 
     // Déplacement de la barre de jeu
     if (barre_1_keyPressed_left) {
-      if (barre_1_posY > -0.75)
-        barre_1_posY -= 0.025; // Vitesse de déplacement
+      if (myBar.position.x > -0.75) {
+        Point newPosition = PointPlusVector(myBar.position, vector_to_left);
+        myBar.position = newPosition;
+      }
     }
     if (barre_1_keyPressed_right) {
-      if (barre_1_posY < 0.75)
-        barre_1_posY += 0.025; // Vitesse de déplacement
+      if (myBar.position.x < 0.75) {
+        Point newPosition = PointPlusVector(myBar.position, vector_to_right);
+        myBar.position = newPosition;
+      }
     }
-
 
     /* Dessin */
     
@@ -131,14 +137,7 @@ int main(int argc, char** argv) {
     glDisable(GL_TEXTURE_2D);
 
     /* Affichage de la Barre de jeu */
-    glPushMatrix();
-    glTranslatef(barre_1_posY, -0.9, 0);
-    glScalef(0.5, 0.05, 1);
-    draw_square(1);
-    glPopMatrix();
-
     drawBar(myBar);
-    printf("%f\n", myBar.position.y);
 
     SDL_GL_SwapBuffers();
 
