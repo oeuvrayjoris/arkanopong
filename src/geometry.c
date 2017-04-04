@@ -21,6 +21,10 @@ Vector VectorXY(Point A, Point B) {
 	return myVector;
 }
 
+float Distance(Vector V) {
+	return sqrt(pow(V.x,2)+pow(V.y,2));
+}
+
 Color3D ColorXY(float red, float green, float blue) {
 	Color3D myColor;
 	myColor.red = red;
