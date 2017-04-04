@@ -102,25 +102,28 @@ int main(int argc, char** argv) {
     if(myBall.position.x+myBall.radius >= 1 || myBall.position.x-myBall.radius <= -1) {
         myBall.vector.x *= -1;
     }
-    if(myBall.position.y+myBall.radius >= 1 || myBall.position.y-myBall.radius <= -1) {
+    if(myBall.position.y+myBall.radius >= 1) {
         myBall.vector.y *= -1;
+    }
+    if(myBall.position.y-myBall.radius <= -1) {
+      printf("Perdu !\n");
     }
 
     /* Collision avec la barre */
     if(myBall.position.y-myBall.radius <= (myBar.position.y + myBar.longueur_y/2)) {
       /* Balle au centre */
-      if(myBall.position.x == myBar.position.x) {
+      if(myBall.position.x <= (myBar.position.x + myBar.longueur_x/6) && myBall.position.x >= (myBar.position.x - myBar.longueur_x/6)) {
         myBall.vector.y *= -1;
       }
       /* Balle à droite */
-      else if(myBall.position.x > myBar.position.x && myBall.position.x <= (myBar.position.x + myBar.longueur_x/2)) { // Balle à droite de la barre
+      else if(myBall.position.x <= (myBar.position.x + myBar.longueur_x/2) && myBall.position.x > (myBar.position.x + myBar.longueur_x/6)) { // Balle à droite de la barre
         myBall.vector.x = 0.01;
-        myBall.vector.y = 0.01;
+        myBall.vector.y *= -1;
       }
       /* Balle à gauche */
-      else if(myBall.position.x < myBar.position.x && myBall.position.x >= (myBar.position.x - myBar.longueur_x/2)) { // Balle à gauche de la barre
+      else if(myBall.position.x < (myBar.position.x - myBar.longueur_x/6) && myBall.position.x >= (myBar.position.x - myBar.longueur_x/2)) { // Balle à gauche de la barre
         myBall.vector.x = -0.01;
-        myBall.vector.y = 0.01;
+        myBall.vector.y *= -1;
       }
     }
 
