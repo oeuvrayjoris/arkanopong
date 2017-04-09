@@ -11,6 +11,7 @@
 #include "bar.h"
 #include "brick.h"
 #include "geometry.h"
+#include "player.h"
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
@@ -48,20 +49,25 @@ int main(int argc, char** argv) {
 
   SDL_WM_SetCaption("Arkanopong", NULL);
 
-  // Définition de la balle
-  Color3D colorBall = ColorXY(255, 0, 0);
-  Point positionBall = PointXY(-0.3, 0);
-  Vector vectorBall = VectorXY(PointXY(0, 0), PointXY(0.01, 0.01));
-  Ball myBall = createBall(0.05, 1, colorBall, positionBall, vectorBall);
+  // Joueur 1
+  Player joueur1 = createPlayer("j1", 0, 3, ColorXY(0, 255, 0));
 
-  // Variables pour la barre de jeu
+  // Joueur 2
+  Player joueur2 = createPlayer("j2", 0, 3, ColorXY(0, 0, 255));
+
+  // BALLE
+  Ball myBall = createBall(0.05, 1, ColorXY(255, 0, 0), PointXY(-0.3, 0), VectorXY(PointXY(0, 0), PointXY(0.01, 0.01)));
+
+  // Variables pour les barres de jeu
   int barre_1_keyPressed_left = 0;
   int barre_1_keyPressed_right = 0;
 
-  // Position de la barre de jeu (du bas)
-  Point position_barre = PointXY(0, -0.9);
-  Color3D colorBlack = ColorXY(0, 0, 0);
-  Bar myBar = createBar(0.5, 0.05, 1, colorBlack, position_barre);
+  int barre_2_keyPressed_left = 0;
+  int barre_2_keyPressed_right = 0;
+
+  // BARRES DE JEU
+  Bar myBar1 = createBar(0.5, 0.05, 1, joueur1.color, PointXY(0, -0.9));
+  Bar myBar2 = createBar(0.5, 0.05, 1, joueur2.color, PointXY(0, 0.9));
 
   // Vecteurs directeurs de déplacements des barres de jeu
   Vector vector_to_left = VectorXY(PointXY(0.025,0), PointXY(0,0));
@@ -71,17 +77,31 @@ int main(int argc, char** argv) {
   while(loop) {
     Uint32 startTime = SDL_GetTicks();
 
-    // Déplacement de la barre de jeu
+    // Déplacement de la barre 1
     if (barre_1_keyPressed_left) {
-      if (myBar.position.x > -0.75) {
-        Point newPosition = PointPlusVector(myBar.position, vector_to_left);
-        myBar.position = newPosition;
+      if (myBar1.position.x > -0.75) {
+        Point newPosition = PointPlusVector(myBar1.position, vector_to_left);
+        myBar1.position = newPosition;
       }
     }
     if (barre_1_keyPressed_right) {
-      if (myBar.position.x < 0.75) {
-        Point newPosition = PointPlusVector(myBar.position, vector_to_right);
-        myBar.position = newPosition;
+      if (myBar1.position.x < 0.75) {
+        Point newPosition = PointPlusVector(myBar1.position, vector_to_right);
+        myBar1.position = newPosition;
+      }
+    }
+
+    // Déplacement de la barre 2
+    if (barre_2_keyPressed_left) {
+      if (myBar2.position.x > -0.75) {
+        Point newPosition = PointPlusVector(myBar2.position, vector_to_left);
+        myBar2.position = newPosition;
+      }
+    }
+    if (barre_2_keyPressed_right) {
+      if (myBar2.position.x < 0.75) {
+        Point newPosition = PointPlusVector(myBar2.position, vector_to_right);
+        myBar2.position = newPosition;
       }
     }
 
@@ -90,11 +110,13 @@ int main(int argc, char** argv) {
     glClearColor(255, 255, 255, 1); // Fond en blanc
     glClear(GL_COLOR_BUFFER_BIT);
 
+
     /* Affichage de la balle */
     drawBall(myBall);
 
     /* Affichage de la barre de déplacement */
-    drawBar(myBar);
+    drawBar(myBar1);
+    drawBar(myBar2);
 
     SDL_GL_SwapBuffers();
 
@@ -103,26 +125,51 @@ int main(int argc, char** argv) {
         myBall.vector.x *= -1;
     }
     if(myBall.position.y+myBall.radius >= 1) {
-        myBall.vector.y *= -1;
+      myBall.vector.y *= -1;
+      joueur2.life--;
     }
     if(myBall.position.y-myBall.radius <= -1) {
-      printf("Perdu !\n");
+      myBall.vector.y *= -1;
+      joueur1.life--;
     }
 
-    /* Collision avec la barre */
-    if(myBall.position.y-myBall.radius <= (myBar.position.y + myBar.longueur_y/2)) {
+    if(joueur1.life <= 0)
+      joueur2.score += 10;
+    if(joueur2.life <= 0)
+      joueur1.score += 10;
+
+    /* Collision avec la barre 1 */
+    if(myBall.position.y-myBall.radius <= (myBar1.position.y + myBar1.longueur_y/2)) {
       /* Balle au centre */
-      if(myBall.position.x <= (myBar.position.x + myBar.longueur_x/6) && myBall.position.x >= (myBar.position.x - myBar.longueur_x/6)) {
+      if(myBall.position.x <= (myBar1.position.x + myBar1.longueur_x/4) && myBall.position.x >= (myBar1.position.x - myBar1.longueur_x/4)) {
         myBall.vector.y *= -1;
       }
       /* Balle à droite */
-      else if(myBall.position.x <= (myBar.position.x + myBar.longueur_x/2) && myBall.position.x > (myBar.position.x + myBar.longueur_x/6)) { // Balle à droite de la barre
+      else if(myBall.position.x <= (myBar1.position.x + myBar1.longueur_x/2) && myBall.position.x > (myBar1.position.x + myBar1.longueur_x/4)) { // Balle à droite de la barre
         myBall.vector.x = 0.01;
         myBall.vector.y *= -1;
       }
       /* Balle à gauche */
-      else if(myBall.position.x < (myBar.position.x - myBar.longueur_x/6) && myBall.position.x >= (myBar.position.x - myBar.longueur_x/2)) { // Balle à gauche de la barre
+      else if(myBall.position.x < (myBar1.position.x - myBar1.longueur_x/4) && myBall.position.x >= (myBar1.position.x - myBar1.longueur_x/2)) { // Balle à gauche de la barre
         myBall.vector.x = -0.01;
+        myBall.vector.y *= -1;
+      }
+    }
+
+    /* Collision avec la barre 2 */
+    if(myBall.position.y+myBall.radius >= (myBar2.position.y - myBar2.longueur_y/2)) {
+      /* Balle au centre */
+      if(myBall.position.x >= (myBar2.position.x - myBar2.longueur_x/4) && myBall.position.x <= (myBar2.position.x + myBar2.longueur_x/4)) {
+        myBall.vector.y *= -1;
+      }
+      /* Balle à droite */
+      else if(myBall.position.x >= (myBar2.position.x - myBar2.longueur_x/2) && myBall.position.x < (myBar2.position.x - myBar2.longueur_x/4)) { // Balle à droite de la barre
+        myBall.vector.x = -0.01;
+        myBall.vector.y *= -1;
+      }
+      /* Balle à gauche */
+      else if(myBall.position.x > (myBar2.position.x + myBar2.longueur_x/4) && myBall.position.x <= (myBar2.position.x + myBar2.longueur_x/2)) { // Balle à gauche de la barre
+        myBall.vector.x = 0.01;
         myBall.vector.y *= -1;
       }
     }
@@ -155,11 +202,19 @@ int main(int argc, char** argv) {
           if (e.key.keysym.sym == SDLK_RIGHT) {
               barre_1_keyPressed_right = e.key.state;
           }
+          if (e.key.keysym.sym == SDLK_a) {
+              barre_2_keyPressed_left = e.key.state;
+          }
+          if (e.key.keysym.sym == SDLK_z) {
+              barre_2_keyPressed_right = e.key.state;
+          }
           break;
 
         case SDL_KEYUP:          
           barre_1_keyPressed_left = e.key.state;
           barre_1_keyPressed_right = e.key.state;
+          barre_2_keyPressed_left = e.key.state;
+          barre_2_keyPressed_right = e.key.state;
 
           break;
           
