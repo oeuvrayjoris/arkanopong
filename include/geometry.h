@@ -21,6 +21,8 @@ Point PointXY(float x, float y);
 
 Vector VectorXY(Point A, Point B);
 
+float Distance(Vector V);
+
 Color3D ColorXY(float red, float green, float blue);
 
 Point PointPlusVector(Point A, Vector B);

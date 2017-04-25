@@ -11,6 +11,7 @@
 #include "bar.h"
 #include "brick.h"
 #include "geometry.h"
+#include "player.h"
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
@@ -48,52 +49,25 @@ int main(int argc, char** argv) {
 
   SDL_WM_SetCaption("Arkanopong", NULL);
 
-  /* TEXTURE DE LA BALLE */
-  GLuint textureBalle;
+  // Joueur 1
+  Player joueur1 = createPlayer("j1", 0, 3, ColorXY(0, 255, 0));
 
-  SDL_Surface *image = IMG_Load("images/balle.jpg");
-  if(image == NULL)
-    printf("Erreur, l'image n'a pas pu être chargée\n");
+  // Joueur 2
+  Player joueur2 = createPlayer("j2", 0, 3, ColorXY(0, 0, 255));
 
-  glGenTextures(1, &textureBalle);
-  glBindTexture(GL_TEXTURE_2D, textureBalle);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glBindTexture(0, textureBalle);
+  // BALLE
+  Ball myBall = createBall(0.05, 1, ColorXY(255, 0, 0), PointXY(-0.3, 0), VectorXY(PointXY(0, 0), PointXY(0.01, 0.01)));
 
-  GLenum format;
-  switch(image->format->BytesPerPixel) {
-    case 1:
-      format = GL_RED;
-      break;
-
-    case 3:
-      format = GL_RGB;
-      break;
-
-    case 4:
-      format = GL_RGBA;
-      break;
-      
-    default:
-      return EXIT_FAILURE;
-  }
-
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, format, GL_UNSIGNED_BYTE, image->pixels);
-
-  float rayonBalle = 0.05;
-  float posX = -0.3;
-  float posY = 0;
-  float vitesseX = 0.01;
-  float vitesseY = 0.01;
-
-  // Variables pour la barre de jeu
+  // Variables pour les barres de jeu
   int barre_1_keyPressed_left = 0;
   int barre_1_keyPressed_right = 0;
 
-  // Position de la barre de jeu (du bas)
-  Point position_barre = PointXY(0, -0.9);
-  Color3D colorBlack = ColorXY(0, 0, 0);
-  Bar myBar = createBar(0.5, 0.05, 1, colorBlack, position_barre);
+  int barre_2_keyPressed_left = 0;
+  int barre_2_keyPressed_right = 0;
+
+  // BARRES DE JEU
+  Bar myBar1 = createBar(0.5, 0.05, 1, joueur1.color, PointXY(0, -0.9));
+  Bar myBar2 = createBar(0.5, 0.05, 1, joueur2.color, PointXY(0, 0.9));
 
   // Vecteurs directeurs de déplacements des barres de jeu
   Vector vector_to_left = VectorXY(PointXY(0.025,0), PointXY(0,0));
@@ -103,17 +77,31 @@ int main(int argc, char** argv) {
   while(loop) {
     Uint32 startTime = SDL_GetTicks();
 
-    // Déplacement de la barre de jeu
+    // Déplacement de la barre 1
     if (barre_1_keyPressed_left) {
-      if (myBar.position.x > -0.75) {
-        Point newPosition = PointPlusVector(myBar.position, vector_to_left);
-        myBar.position = newPosition;
+      if (myBar1.position.x > -0.75) {
+        Point newPosition = PointPlusVector(myBar1.position, vector_to_left);
+        myBar1.position = newPosition;
       }
     }
     if (barre_1_keyPressed_right) {
-      if (myBar.position.x < 0.75) {
-        Point newPosition = PointPlusVector(myBar.position, vector_to_right);
-        myBar.position = newPosition;
+      if (myBar1.position.x < 0.75) {
+        Point newPosition = PointPlusVector(myBar1.position, vector_to_right);
+        myBar1.position = newPosition;
+      }
+    }
+
+    // Déplacement de la barre 2
+    if (barre_2_keyPressed_left) {
+      if (myBar2.position.x > -0.75) {
+        Point newPosition = PointPlusVector(myBar2.position, vector_to_left);
+        myBar2.position = newPosition;
+      }
+    }
+    if (barre_2_keyPressed_right) {
+      if (myBar2.position.x < 0.75) {
+        Point newPosition = PointPlusVector(myBar2.position, vector_to_right);
+        myBar2.position = newPosition;
       }
     }
 
@@ -121,35 +109,72 @@ int main(int argc, char** argv) {
     
     glClearColor(255, 255, 255, 1); // Fond en blanc
     glClear(GL_COLOR_BUFFER_BIT);
-    //glColor3f(255, 0, 0); // Eléments en rouge
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureBalle);
+
 
     /* Affichage de la balle */
-    glPushMatrix();
-    glTranslatef(posX, posY, 0);
-    glScalef(rayonBalle*2, rayonBalle*2, 1);
-    draw_circle(1);
-    
-    glPopMatrix();
+    drawBall(myBall);
 
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_TEXTURE_2D);
-
-    /* Affichage de la Barre de jeu */
-    drawBar(myBar);
+    /* Affichage de la barre de déplacement */
+    drawBar(myBar1);
+    drawBar(myBar2);
 
     SDL_GL_SwapBuffers();
 
-    if(posX+rayonBalle >= 1-rayonBalle || posX-rayonBalle <= -1+rayonBalle) {
-        vitesseX *= -1;
+    /* Collision avec les bords de la fenêtre */
+    if(myBall.position.x+myBall.radius >= 1 || myBall.position.x-myBall.radius <= -1) {
+        myBall.vector.x *= -1;
     }
-    if(posY+rayonBalle >= 1-rayonBalle || posY-rayonBalle <= -1+rayonBalle) {
-        vitesseY *= -1;
+    if(myBall.position.y+myBall.radius >= 1) {
+      myBall.vector.y *= -1;
+      joueur2.life--;
+    }
+    if(myBall.position.y-myBall.radius <= -1) {
+      myBall.vector.y *= -1;
+      joueur1.life--;
     }
 
-    posX += vitesseX;
-    posY += vitesseY;
+    if(joueur1.life <= 0)
+      joueur2.score += 10;
+    if(joueur2.life <= 0)
+      joueur1.score += 10;
+
+    /* Collision avec la barre 1 */
+    if(myBall.position.y-myBall.radius <= (myBar1.position.y + myBar1.longueur_y/2)) {
+      /* Balle au centre */
+      if(myBall.position.x <= (myBar1.position.x + myBar1.longueur_x/4) && myBall.position.x >= (myBar1.position.x - myBar1.longueur_x/4)) {
+        myBall.vector.y *= -1;
+      }
+      /* Balle à droite */
+      else if(myBall.position.x <= (myBar1.position.x + myBar1.longueur_x/2) && myBall.position.x > (myBar1.position.x + myBar1.longueur_x/4)) { // Balle à droite de la barre
+        myBall.vector.x = 0.01;
+        myBall.vector.y *= -1;
+      }
+      /* Balle à gauche */
+      else if(myBall.position.x < (myBar1.position.x - myBar1.longueur_x/4) && myBall.position.x >= (myBar1.position.x - myBar1.longueur_x/2)) { // Balle à gauche de la barre
+        myBall.vector.x = -0.01;
+        myBall.vector.y *= -1;
+      }
+    }
+
+    /* Collision avec la barre 2 */
+    if(myBall.position.y+myBall.radius >= (myBar2.position.y - myBar2.longueur_y/2)) {
+      /* Balle au centre */
+      if(myBall.position.x >= (myBar2.position.x - myBar2.longueur_x/4) && myBall.position.x <= (myBar2.position.x + myBar2.longueur_x/4)) {
+        myBall.vector.y *= -1;
+      }
+      /* Balle à droite */
+      else if(myBall.position.x >= (myBar2.position.x - myBar2.longueur_x/2) && myBall.position.x < (myBar2.position.x - myBar2.longueur_x/4)) { // Balle à droite de la barre
+        myBall.vector.x = -0.01;
+        myBall.vector.y *= -1;
+      }
+      /* Balle à gauche */
+      else if(myBall.position.x > (myBar2.position.x + myBar2.longueur_x/4) && myBall.position.x <= (myBar2.position.x + myBar2.longueur_x/2)) { // Balle à gauche de la barre
+        myBall.vector.x = 0.01;
+        myBall.vector.y *= -1;
+      }
+    }
+
+    myBall.position = PointPlusVector(myBall.position, myBall.vector);
 
     /* ****** */    
 
@@ -177,11 +202,19 @@ int main(int argc, char** argv) {
           if (e.key.keysym.sym == SDLK_RIGHT) {
               barre_1_keyPressed_right = e.key.state;
           }
+          if (e.key.keysym.sym == SDLK_a) {
+              barre_2_keyPressed_left = e.key.state;
+          }
+          if (e.key.keysym.sym == SDLK_z) {
+              barre_2_keyPressed_right = e.key.state;
+          }
           break;
 
         case SDL_KEYUP:          
           barre_1_keyPressed_left = e.key.state;
           barre_1_keyPressed_right = e.key.state;
+          barre_2_keyPressed_left = e.key.state;
+          barre_2_keyPressed_right = e.key.state;
 
           break;
           
@@ -196,8 +229,6 @@ int main(int argc, char** argv) {
     }
   }
 
-  glDeleteTextures(1, &textureBalle);
-  SDL_FreeSurface(image);
   
   SDL_Quit();
   
