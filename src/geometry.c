@@ -56,3 +56,16 @@ Vector MultVector(Vector A, float scalaire) {
 	myVector.y = A.y * scalaire;
 	return myVector;	
 }
+
+float norm(Vector A) {
+	float valeur;
+	valeur = pow(A.x, 2) + pow(A.y, 2);
+	valeur = sqrt(valeur);
+	return valeur;
+}
+
+float dotProduct(Vector A, Vector B) {
+	float valeur;
+	valeur = A.x * B.x + A*y + B*y;
+	return valeur;
+}
