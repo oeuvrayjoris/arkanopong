@@ -13,9 +13,4 @@ int collisionBallBrick() {
 
 int collisionBallBar(Ball ball, Bar bar) {
 
-	if (bar.position.y > 0) {
-		Vector myVector = VectorXY();
-	}
-
-	return 0;
 }

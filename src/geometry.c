@@ -70,6 +70,6 @@ float norm(Vector A) {
 
 float dotProduct(Vector A, Vector B) {
 	float valeur;
-	valeur = A.x * B.x + A*y + B*y;
+	valeur = A.x * B.x + A.y * B.y;
 	return valeur;
 }

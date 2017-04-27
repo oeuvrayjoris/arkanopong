@@ -19,7 +19,6 @@ Bar createBar(float longueur_x, float longueur_y, int full, Color3D color, Point
 }
 
 void drawBar(Bar bar) {
-	//printf("y %f - x %f\n", bar.position.y, bar.position.x);
 
 	glColor3ub(bar.color.red, bar.color.green, bar.color.blue);
 	glPushMatrix();

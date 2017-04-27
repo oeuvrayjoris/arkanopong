@@ -49,14 +49,19 @@ int main(int argc, char** argv) {
 
   SDL_WM_SetCaption("Arkanopong", NULL);
 
+  //************************************
+
   // Joueur 1
   Player joueur1 = createPlayer("j1", 0, 3, ColorXY(0, 255, 0));
 
   // Joueur 2
   Player joueur2 = createPlayer("j2", 0, 3, ColorXY(0, 0, 255));
 
+  //************************************
+
   // BALLE
-  Ball myBall = createBall(0.05, 1, ColorXY(255, 0, 0), PointXY(-0.3, 0), VectorXY(PointXY(0, 0), PointXY(0.01, 0.01)));
+  Ball myBall1 = createBall(0.05, 1, ColorXY(255, 0, 0), PointXY(-0.3, 0), VectorXY(PointXY(0, 0), PointXY(0.01, 0.01)));
+  Ball myBall2 = createBall(0.05, 1, ColorXY(255, 0, 255), PointXY(-0.3, 0), VectorXY(PointXY(0, 0), PointXY(-0.01, -0.01)));
 
   // Variables pour les barres de jeu
   int barre_1_keyPressed_left = 0;
@@ -65,6 +70,8 @@ int main(int argc, char** argv) {
   int barre_2_keyPressed_left = 0;
   int barre_2_keyPressed_right = 0;
 
+  //************************************
+
   // BARRES DE JEU
   Bar myBar1 = createBar(0.5, 0.05, 1, joueur1.color, PointXY(0, -0.9));
   Bar myBar2 = createBar(0.5, 0.05, 1, joueur2.color, PointXY(0, 0.9));
@@ -72,6 +79,38 @@ int main(int argc, char** argv) {
   // Vecteurs directeurs de déplacements des barres de jeu
   Vector vector_to_left = VectorXY(PointXY(0.025,0), PointXY(0,0));
   Vector vector_to_right = VectorXY(PointXY(0,0), PointXY(0.025,0));
+
+  //************************************
+
+  // BRIQUES
+  int nb_brick_x = 6;
+  int nb_brick_y = 3;
+  int nb_brick_total = nb_brick_x * nb_brick_y;
+  float brick_space_y = (float)(WINDOW_HEIGHT/4)/WINDOW_HEIGHT;
+  float hauteur_brick = brick_space_y/nb_brick_y;
+  float largeur_brick = (float)(WINDOW_WIDTH/nb_brick_x)/WINDOW_WIDTH;
+  float brick_position_x = largeur_brick/2;
+  float brick_position_y = (float)(WINDOW_HEIGHT/4)/WINDOW_HEIGHT + (hauteur_brick)/2;
+  Brick tab_bricks[nb_brick_total];
+  int i = 0;
+  int j = 0;
+  int count = 0;
+  printf("height %d - hau %.3f - lar %.3f\n - pos %.3f - posY %.3f", WINDOW_HEIGHT, hauteur_brick, largeur_brick, brick_position_x, brick_position_y);
+
+  Color3D colorBrick = ColorXY(0, 0, 0);
+  for (i = 0; i < nb_brick_x; i++) {
+    for (j = 0; j < nb_brick_y; j++) {
+      Point position_brick = PointXY(brick_position_x * (i+1)-1, brick_position_y * (j+1)-0.5);
+      if (count == 0)
+        printf("%.3f\n", brick_position_x * (i+1)-1 );
+      tab_bricks[count] = createBrick(largeur_brick, hauteur_brick, 0, 1, colorBrick, position_brick);
+      count++;
+    }
+  }
+
+  //Brick aBrick = createBrick(0.5, 0.5, 1, 1, colorBrick, PointXY(0.5, 0.5));
+
+  //************************************
 
   int loop = 1;
   while(loop) {
@@ -112,24 +151,44 @@ int main(int argc, char** argv) {
 
 
     /* Affichage de la balle */
-    drawBall(myBall);
+    drawBall(myBall1);
+    drawBall(myBall2);
 
     /* Affichage de la barre de déplacement */
     drawBar(myBar1);
     drawBar(myBar2);
 
+    /* Affichage des briques */
+    for (count = 0; count < nb_brick_total; count++) {
+      drawBrick(tab_bricks[count]);
+    }
+    drawBrick(tab_bricks[0]);
+    //drawBrick(aBrick);
+
     SDL_GL_SwapBuffers();
 
     /* Collision avec les bords de la fenêtre */
-    if(myBall.position.x+myBall.radius >= 1 || myBall.position.x-myBall.radius <= -1) {
-        myBall.vector.x *= -1;
+    if(myBall1.position.x+myBall1.radius >= 1 || myBall1.position.x-myBall1.radius <= -1) {
+        myBall1.vector.x *= -1;
     }
-    if(myBall.position.y+myBall.radius >= 1) {
-      myBall.vector.y *= -1;
+    if(myBall1.position.y+myBall1.radius >= 1) {
+      myBall1.vector.y *= -1;
       joueur2.life--;
     }
-    if(myBall.position.y-myBall.radius <= -1) {
-      myBall.vector.y *= -1;
+    if(myBall1.position.y-myBall1.radius <= -1) {
+      myBall1.vector.y *= -1;
+      joueur1.life--;
+    }
+
+    if(myBall2.position.x+myBall2.radius >= 1 || myBall2.position.x-myBall2.radius <= -1) {
+        myBall2.vector.x *= -1;
+    }
+    if(myBall2.position.y+myBall2.radius >= 1) {
+      myBall2.vector.y *= -1;
+      joueur2.life--;
+    }
+    if(myBall2.position.y-myBall2.radius <= -1) {
+      myBall2.vector.y *= -1;
       joueur1.life--;
     }
 
@@ -138,43 +197,13 @@ int main(int argc, char** argv) {
     if(joueur2.life <= 0)
       joueur1.score += 10;
 
-    /* Collision avec la barre 1 */
-    if(myBall.position.y-myBall.radius <= (myBar1.position.y + myBar1.longueur_y/2)) {
-      /* Balle au centre */
-      if(myBall.position.x <= (myBar1.position.x + myBar1.longueur_x/4) && myBall.position.x >= (myBar1.position.x - myBar1.longueur_x/4)) {
-        myBall.vector.y *= -1;
-      }
-      /* Balle à droite */
-      else if(myBall.position.x <= (myBar1.position.x + myBar1.longueur_x/2) && myBall.position.x > (myBar1.position.x + myBar1.longueur_x/4)) { // Balle à droite de la barre
-        myBall.vector.x = 0.01;
-        myBall.vector.y *= -1;
-      }
-      /* Balle à gauche */
-      else if(myBall.position.x < (myBar1.position.x - myBar1.longueur_x/4) && myBall.position.x >= (myBar1.position.x - myBar1.longueur_x/2)) { // Balle à gauche de la barre
-        myBall.vector.x = -0.01;
-        myBall.vector.y *= -1;
-      }
-    }
+    collisionWithBar(&myBall1, myBar1, 1);
+    collisionWithBar(&myBall1, myBar2, 0);
+    collisionWithBar(&myBall2, myBar1, 1);
+    collisionWithBar(&myBall2, myBar2, 0);
 
-    /* Collision avec la barre 2 */
-    if(myBall.position.y+myBall.radius >= (myBar2.position.y - myBar2.longueur_y/2)) {
-      /* Balle au centre */
-      if(myBall.position.x >= (myBar2.position.x - myBar2.longueur_x/4) && myBall.position.x <= (myBar2.position.x + myBar2.longueur_x/4)) {
-        myBall.vector.y *= -1;
-      }
-      /* Balle à droite */
-      else if(myBall.position.x >= (myBar2.position.x - myBar2.longueur_x/2) && myBall.position.x < (myBar2.position.x - myBar2.longueur_x/4)) { // Balle à droite de la barre
-        myBall.vector.x = -0.01;
-        myBall.vector.y *= -1;
-      }
-      /* Balle à gauche */
-      else if(myBall.position.x > (myBar2.position.x + myBar2.longueur_x/4) && myBall.position.x <= (myBar2.position.x + myBar2.longueur_x/2)) { // Balle à gauche de la barre
-        myBall.vector.x = 0.01;
-        myBall.vector.y *= -1;
-      }
-    }
-
-    myBall.position = PointPlusVector(myBall.position, myBall.vector);
+    myBall1.position = PointPlusVector(myBall1.position, myBall1.vector);
+    myBall2.position = PointPlusVector(myBall2.position, myBall2.vector);
 
     /* ****** */    
 
