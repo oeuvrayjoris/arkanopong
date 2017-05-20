@@ -12,6 +12,7 @@
 #include "brick.h"
 #include "geometry.h"
 #include "player.h"
+#include "images.h"
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
@@ -39,7 +40,7 @@ void setVideoMode(unsigned int width, unsigned int height) {
 int main(int argc, char** argv) {
   unsigned int WINDOW_WIDTH = 600;
   unsigned int WINDOW_HEIGHT = 600;
-  
+
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
     return EXIT_FAILURE;
@@ -48,7 +49,7 @@ int main(int argc, char** argv) {
   setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
 
   SDL_WM_SetCaption("Arkanopong", NULL);
-
+  
   //************************************
 
   // Joueur 1
@@ -60,8 +61,8 @@ int main(int argc, char** argv) {
   //************************************
 
   // BALLE
-  Ball myBall1 = createBall(0.05, 1, ColorXY(255, 0, 0), PointXY(-0.3, 0), VectorXY(PointXY(0, 0), PointXY(0.01, 0.01)));
-  Ball myBall2 = createBall(0.05, 1, ColorXY(255, 0, 255), PointXY(-0.3, 0), VectorXY(PointXY(0, 0), PointXY(-0.01, -0.01)));
+    Ball myBall1 = createBall(0.05, 1, ColorXY(255, 0, 0), PointXY(0, 0.5), VectorXY(PointXY(0, 0), PointXY(0, -0.01)));
+    Ball myBall2 = createBall(0.05, 1, ColorXY(255, 0, 255), PointXY(0, -0.5), VectorXY(PointXY(0, 0), PointXY(0, 0.01)));
 
   // Variables pour les barres de jeu
   int barre_1_keyPressed_left = 0;
@@ -110,13 +111,15 @@ int main(int argc, char** argv) {
 
   //Brick aBrick = createBrick(0.5, 0.5, 1, 1, colorBrick, PointXY(0.5, 0.5));
 
+  
+
   //************************************
 
   int loop = 1;
   while(loop) {
     Uint32 startTime = SDL_GetTicks();
 
-    // Déplacement de la barre 1
+    /* Déplacement de la barre 1 */
     if (barre_1_keyPressed_left) {
       if (myBar1.position.x > -0.75) {
         Point newPosition = PointPlusVector(myBar1.position, vector_to_left);
@@ -130,7 +133,7 @@ int main(int argc, char** argv) {
       }
     }
 
-    // Déplacement de la barre 2
+    /* Déplacement de la barre 2 */
     if (barre_2_keyPressed_left) {
       if (myBar2.position.x > -0.75) {
         Point newPosition = PointPlusVector(myBar2.position, vector_to_left);
@@ -149,7 +152,6 @@ int main(int argc, char** argv) {
     glClearColor(255, 255, 255, 1); // Fond en blanc
     glClear(GL_COLOR_BUFFER_BIT);
 
-
     /* Affichage de la balle */
     drawBall(myBall1);
     drawBall(myBall2);
@@ -159,43 +161,57 @@ int main(int argc, char** argv) {
     drawBar(myBar2);
 
     /* Affichage des briques */
-    for (count = 0; count < nb_brick_total; count++) {
+    /*for (count = 0; count < nb_brick_total; count++) {
       drawBrick(tab_bricks[count]);
     }
-    drawBrick(tab_bricks[0]);
+    drawBrick(tab_bricks[0]);*/
     //drawBrick(aBrick);
 
-    SDL_GL_SwapBuffers();
+    /* Affichage des points de vie */
+    if(joueur1.life != 0 && joueur2.life != 0)
+      image_coeur(joueur1.life, joueur2.life);
+    else {
+      myBall1 = createBall(0.05, 1, ColorXY(255, 0, 0), PointXY(0, 0.5), VectorXY(PointXY(0, 0), PointXY(0, -0.01)));
+      myBall2 = createBall(0.05, 1, ColorXY(255, 0, 255), PointXY(0, -0.5), VectorXY(PointXY(0, 0), PointXY(0, 0.01)));
+      if(joueur1.life == 0) {
+        joueur1.life = 3;
+        joueur2.score++;
+      }
+      if(joueur2.life == 0) {
+        joueur2.life = 3;
+        joueur1.score++;
+      }
+    }
 
+    
     /* Collision avec les bords de la fenêtre */
     if(myBall1.position.x+myBall1.radius >= 1 || myBall1.position.x-myBall1.radius <= -1) {
         myBall1.vector.x *= -1;
     }
     if(myBall1.position.y+myBall1.radius >= 1) {
-      myBall1.vector.y *= -1;
       joueur2.life--;
+      myBall1 = createBall(0.05, 1, ColorXY(255, 0, 0), PointXY(0, 0.5), VectorXY(PointXY(0, 0), PointXY(0, -0.01)));
+      myBall2 = createBall(0.05, 1, ColorXY(255, 0, 255), PointXY(0, -0.5), VectorXY(PointXY(0, 0), PointXY(0, 0.01)));
     }
     if(myBall1.position.y-myBall1.radius <= -1) {
-      myBall1.vector.y *= -1;
       joueur1.life--;
+      myBall1 = createBall(0.05, 1, ColorXY(255, 0, 0), PointXY(0, 0.5), VectorXY(PointXY(0, 0), PointXY(0, -0.01)));
+      myBall2 = createBall(0.05, 1, ColorXY(255, 0, 255), PointXY(0, -0.5), VectorXY(PointXY(0, 0), PointXY(0, 0.01)));
     }
 
     if(myBall2.position.x+myBall2.radius >= 1 || myBall2.position.x-myBall2.radius <= -1) {
         myBall2.vector.x *= -1;
     }
     if(myBall2.position.y+myBall2.radius >= 1) {
-      myBall2.vector.y *= -1;
       joueur2.life--;
+      myBall1 = createBall(0.05, 1, ColorXY(255, 0, 0), PointXY(0, 0.5), VectorXY(PointXY(0, 0), PointXY(0, -0.01)));
+      myBall2 = createBall(0.05, 1, ColorXY(255, 0, 255), PointXY(0, -0.5), VectorXY(PointXY(0, 0), PointXY(0, 0.01)));
     }
     if(myBall2.position.y-myBall2.radius <= -1) {
-      myBall2.vector.y *= -1;
       joueur1.life--;
+      myBall1 = createBall(0.05, 1, ColorXY(255, 0, 0), PointXY(0, 0.5), VectorXY(PointXY(0, 0), PointXY(0, -0.01)));
+      myBall2 = createBall(0.05, 1, ColorXY(255, 0, 255), PointXY(0, -0.5), VectorXY(PointXY(0, 0), PointXY(0, 0.01)));
     }
-
-    if(joueur1.life <= 0)
-      joueur2.score += 10;
-    if(joueur2.life <= 0)
-      joueur1.score += 10;
 
     collisionWithBar(&myBall1, myBar1, 1);
     collisionWithBar(&myBall1, myBar2, 0);
@@ -204,6 +220,8 @@ int main(int argc, char** argv) {
 
     myBall1.position = PointPlusVector(myBall1.position, myBall1.vector);
     myBall2.position = PointPlusVector(myBall2.position, myBall2.vector);
+
+    SDL_GL_SwapBuffers();
 
     /* ****** */    
 
@@ -258,7 +276,6 @@ int main(int argc, char** argv) {
     }
   }
 
-  
   SDL_Quit();
   
   return EXIT_SUCCESS;
