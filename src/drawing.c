@@ -73,3 +73,26 @@ void draw_rounded_square(int full, float radius) {
     glVertex2f(-0.5+radius+cos(j)*radius, -0.5+radius+sin(j)*radius);
   glEnd();
 }
+
+void drawReperes() {
+    glColor3ub(255, 0, 0);
+    glBegin(GL_LINES);
+      glVertex2f(-1, 0);
+      glVertex2f(1, 0);
+    glEnd();
+    glColor3ub(255, 0, 0);
+    glBegin(GL_LINES);
+      glVertex2f(0, -1);
+      glVertex2f(0, 1);
+    glEnd();
+    glColor3ub(0, 255, 0);
+    glBegin(GL_LINES);
+      glVertex2f(-1, 0.5);
+      glVertex2f(1, 0.5);
+    glEnd();
+    glColor3ub(0, 255, 0);
+    glBegin(GL_LINES);
+      glVertex2f(-1, -0.5);
+      glVertex2f(1, -0.5);
+    glEnd();
+}

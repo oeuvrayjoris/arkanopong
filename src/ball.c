@@ -8,6 +8,7 @@
 #include "geometry.h"
 #include "ball.h"
 #include "bar.h"
+#include "brick.h"
 
 Ball createBall(float radius, int full, Color3D color, Point position, Vector vector) {
 	Ball ball;
@@ -35,27 +36,24 @@ void drawBall(Ball ball) {
 	glPopMatrix();
 }
 
-/*int collisionWithWindow(Ball *ball) {
-
-}*/
-
+// Cette fonction vérifie s'il y a collision entre une des balles et une des barres et modifie le vecteur directeur s'il y a collision
 int collisionWithBar(Ball *ball, Bar bar, int onTop) {
 	if (onTop) {
 		/* Collision avec la barre 1 */
-		if(ball->position.y-ball->radius <= (bar.position.y + bar.longueur_y/2)) {
+		if(ball->position.y-ball->radius <= (bar.position.y + bar.longueur/2)) {
 			/* Balle au centre */
-			if(ball->position.x <= (bar.position.x + bar.longueur_x/4) && ball->position.x >= (bar.position.x - bar.longueur_x/4)) {
+			if(ball->position.x <= (bar.position.x + bar.largeur/4) && ball->position.x >= (bar.position.x - bar.largeur/4)) {
 				ball->vector.y *= -1;
 				return 1;
 			}
 			/* Balle à droite */
-			else if(ball->position.x <= (bar.position.x + bar.longueur_x/2) && ball->position.x > (bar.position.x + bar.longueur_x/4)) { // Balle à droite de la barre
+			else if(ball->position.x <= (bar.position.x + bar.largeur/2) && ball->position.x > (bar.position.x + bar.largeur/4)) { // Balle à droite de la barre
 				ball->vector.x = 0.01;
 				ball->vector.y *= -1;
 				return 1;
 			}
 			/* Balle à gauche */
-			else if(ball->position.x < (bar.position.x - bar.longueur_x/4) && ball->position.x >= (bar.position.x - bar.longueur_x/2)) { // Balle à gauche de la barre
+			else if(ball->position.x < (bar.position.x - bar.largeur/4) && ball->position.x >= (bar.position.x - bar.largeur/2)) { // Balle à gauche de la barre
 				ball->vector.x = -0.01;
 				ball->vector.y *= -1;
 				return 1;
@@ -65,20 +63,20 @@ int collisionWithBar(Ball *ball, Bar bar, int onTop) {
 	}
 	else {
 	/* Collision avec la barre 2 */
-		if(ball->position.y+ball->radius >= (bar.position.y - bar.longueur_y/2)) {
+		if(ball->position.y+ball->radius >= (bar.position.y - bar.longueur/2)) {
 			/* Balle au centre */
-			if(ball->position.x >= (bar.position.x - bar.longueur_x/4) && ball->position.x <= (bar.position.x + bar.longueur_x/4)) {
+			if(ball->position.x >= (bar.position.x - bar.largeur/4) && ball->position.x <= (bar.position.x + bar.largeur/4)) {
 				ball->vector.y *= -1;
 				return 1;
 			}
 			/* Balle à droite */
-			else if(ball->position.x >= (bar.position.x - bar.longueur_x/2) && ball->position.x < (bar.position.x - bar.longueur_x/4)) { // Balle à droite de la barre
+			else if(ball->position.x >= (bar.position.x - bar.largeur/2) && ball->position.x < (bar.position.x - bar.largeur/4)) { // Balle à droite de la barre
 				ball->vector.x = -0.01;
 				ball->vector.y *= -1;
 				return 1;
 			}
 			/* Balle à gauche */
-			else if(ball->position.x > (bar.position.x + bar.longueur_x/4) && ball->position.x <= (bar.position.x + bar.longueur_x/2)) { // Balle à gauche de la barre
+			else if(ball->position.x > (bar.position.x + bar.largeur/4) && ball->position.x <= (bar.position.x + bar.largeur/2)) { // Balle à gauche de la barre
 				ball->vector.x = 0.01;
 				ball->vector.y *= -1;
 				return 1;
@@ -86,4 +84,18 @@ int collisionWithBar(Ball *ball, Bar bar, int onTop) {
 		}
 		return 0;
 	}
+}
+
+// Cette fonction vérifie s'il y a collision avec la fenêtre (ou sortie de jeu)
+int collisionWithWindow(Ball ball) {
+	return 0;
+}
+
+int collisionWithBrick(Brick *brick, Ball *ball) {
+	/*if (brick->state) {
+
+		// gestion
+		switch
+	}*/
+	return 0;
 }

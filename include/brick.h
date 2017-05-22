@@ -2,15 +2,21 @@
 #define BRICK_H_
 
 typedef struct Brick {
-	float longueur_x;
-	float longueur_y;
+	float largeur;
+	float longueur;
 	int full;
 	int state;
+	int type;
 	Color3D color;
 	Point position;
 } Brick;
 
-Brick createBrick(float longueur_x, float longueur_y, int full, int state, Color3D color, Point position);
+typedef struct TableBrick {
+	Brick *current;
+	Brick *next;
+} TableBrick;
+
+Brick createBrick(float largeur, float longueur, int full, int state, int type, Color3D color, Point position);
 
 void drawBrick(Brick brick);
 

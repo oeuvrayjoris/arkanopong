@@ -8,10 +8,10 @@
 #include "geometry.h"
 #include "bar.h"
 
-Bar createBar(float longueur_x, float longueur_y, int full, Color3D color, Point position) {
+Bar createBar(float largeur, float longueur, int full, Color3D color, Point position) {
 	Bar myBar;
-	myBar.longueur_x = longueur_x;
-	myBar.longueur_y = longueur_y;
+	myBar.largeur = largeur;
+	myBar.longueur = longueur;
 	myBar.full = full;
 	myBar.color = color;
 	myBar.position = position;
@@ -24,10 +24,10 @@ void drawBar(Bar bar) {
 	glPushMatrix();
 		glTranslatef(bar.position.x, bar.position.y, 0);
 		glBegin(bar.full ? GL_QUADS : GL_LINE_LOOP);
-			glVertex2f(-bar.longueur_x/2, bar.longueur_y/2);
-			glVertex2f(bar.longueur_x/2, bar.longueur_y/2);
-			glVertex2f(bar.longueur_x/2, -bar.longueur_y/2);
-			glVertex2f(-bar.longueur_x/2, -bar.longueur_y/2);
+			glVertex2f(-bar.largeur/2, bar.longueur/2);
+			glVertex2f(bar.largeur/2, bar.longueur/2);
+			glVertex2f(bar.largeur/2, -bar.longueur/2);
+			glVertex2f(-bar.largeur/2, -bar.longueur/2);
 		glEnd();
 	glPopMatrix();
 
