@@ -59,8 +59,17 @@ int main(int argc, char** argv) {
   //************************************
 
   // Création des balles
-    Ball myBall1 = createBall(0.025, 1, ColorXY(255, 0, 0), PointXY(0, 0.5), VectorXY(PointXY(0, 0), PointXY(0, -0.01)));
-    Ball myBall2 = createBall(0.025, 1, ColorXY(255, 0, 255), PointXY(0, -0.5), VectorXY(PointXY(0, 0), PointXY(0, 0.01)));
+
+  Vector initDirection_1 = VectorXY(PointXY(0, 0), PointXY(0, -0.005));
+  Point initPoint_1 = PointXY(0, 0.75);
+  Vector initDirection_2 = VectorXY(PointXY(0, 0), PointXY(0, 0.005));
+  Point initPoint_2 = PointXY(0, -0.75);
+  float radius = 0.025;
+
+  Ball myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+  Ball myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+
+  //************************************
 
   // Variables pour les barres de jeu
   int barre_1_keyPressed_left = 0;
@@ -68,8 +77,6 @@ int main(int argc, char** argv) {
 
   int barre_2_keyPressed_left = 0;
   int barre_2_keyPressed_right = 0;
-
-  //************************************
 
   // BARRES DE JEU
   Bar myBar1 = createBar(0.5, 0.05, 1, joueur1.color, PointXY(0, -0.9));
@@ -82,6 +89,8 @@ int main(int argc, char** argv) {
   //************************************
 
   // BRIQUES DE JEU
+  
+  int bricksIterator;
 
   FILE *brickFile;
   long input_file_size;
@@ -111,7 +120,6 @@ int main(int argc, char** argv) {
   char *token;
   token = strtok(brickFileContent, " ");
   while (token != NULL) {
-    printf("%s\n", token);
     if (index == 0) {
       nb_brick_x = strtol(token, NULL, 10);
     }
@@ -145,10 +153,12 @@ int main(int argc, char** argv) {
   for (i = 0; i < nb_brick_x; i++) {
     for (j = 0; j < nb_brick_y; j++) {
       Point position_brick = PointXY(brick_position_x + largeur_brick * i, brick_position_y - hauteur_brick * j);
-      tab_bricks[count] = createBrick(largeur_brick, hauteur_brick, 0, 1, bricksType[count] ,colorBrick, position_brick);
+      tab_bricks[count] = createBrick(largeur_brick, hauteur_brick, 0, 1, bricksType[count], colorBrick, position_brick);
       count++;
     }
   }
+
+  printf("-- %.3f\n",(tab_bricks[0].position.y-tab_bricks[0].longueur));
 
   //printf("-- %.3f -- %.3f\n", hauteur_brick, tab_bricks[2].position.x);
   //affiche_tab(bricksType, nb_brick_total);
@@ -207,14 +217,15 @@ int main(int argc, char** argv) {
     for (count = 0; count < nb_brick_total; count++) {
       drawBrick(tab_bricks[count]);
     }
+    //drawBrick(tab_bricks[0]);
 
     /* Affichage des points de vie */
     if(joueur1.life != 0 && joueur2.life != 0)
       image_coeur(joueur1.life, joueur2.life);
     else {
-      myBall1 = createBall(0.025, 1, ColorXY(255, 0, 0), PointXY(0, 0.5), VectorXY(PointXY(0, 0), PointXY(0, -0.01)));
-      myBall2 = createBall(0.025, 1, ColorXY(255, 0, 255), PointXY(0, -0.5), VectorXY(PointXY(0, 0), PointXY(0, 0.01)));
-      if(joueur1.life == 0) {
+      myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+      myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+     if(joueur1.life == 0) {
         joueur1.life = 3;
         joueur2.score++;
       }
@@ -230,13 +241,13 @@ int main(int argc, char** argv) {
     }
     if(myBall1.position.y+myBall1.radius >= 1) {
       joueur2.life--;
-      myBall1 = createBall(0.025, 1, ColorXY(255, 0, 0), PointXY(0, 0.5), VectorXY(PointXY(0, 0), PointXY(0, -0.01)));
-      myBall2 = createBall(0.025, 1, ColorXY(255, 0, 255), PointXY(0, -0.5), VectorXY(PointXY(0, 0), PointXY(0, 0.01)));
+      myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+      myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
     }
     if(myBall1.position.y-myBall1.radius <= -1) {
       joueur1.life--;
-      myBall1 = createBall(0.025, 1, ColorXY(255, 0, 0), PointXY(0, 0.5), VectorXY(PointXY(0, 0), PointXY(0, -0.01)));
-      myBall2 = createBall(0.025, 1, ColorXY(255, 0, 255), PointXY(0, -0.5), VectorXY(PointXY(0, 0), PointXY(0, 0.01)));
+      myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+      myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
     }
 
     if(myBall2.position.x+myBall2.radius >= 1 || myBall2.position.x-myBall2.radius <= -1) {
@@ -244,19 +255,26 @@ int main(int argc, char** argv) {
     }
     if(myBall2.position.y+myBall2.radius >= 1) {
       joueur2.life--;
-      myBall1 = createBall(0.025, 1, ColorXY(255, 0, 0), PointXY(0, 0.5), VectorXY(PointXY(0, 0), PointXY(0, -0.01)));
-      myBall2 = createBall(0.025, 1, ColorXY(255, 0, 255), PointXY(0, -0.5), VectorXY(PointXY(0, 0), PointXY(0, 0.01)));
+      myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+      myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
     }
     if(myBall2.position.y-myBall2.radius <= -1) {
       joueur1.life--;
-      myBall1 = createBall(0.025, 1, ColorXY(255, 0, 0), PointXY(0, 0.5), VectorXY(PointXY(0, 0), PointXY(0, -0.01)));
-      myBall2 = createBall(0.025, 1, ColorXY(255, 0, 255), PointXY(0, -0.5), VectorXY(PointXY(0, 0), PointXY(0, 0.01)));
+      myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+      myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
     }
 
     collisionWithBar(&myBall1, myBar1, 1);
     collisionWithBar(&myBall1, myBar2, 0);
     collisionWithBar(&myBall2, myBar1, 1);
     collisionWithBar(&myBall2, myBar2, 0);
+
+    //collisionWithBrick(&myBall1, &tab_bricks[0]);
+
+    for (bricksIterator = 0; bricksIterator < nb_brick_total; bricksIterator++) {
+      collisionWithBrick(&myBall1, &tab_bricks[bricksIterator]);
+      collisionWithBrick(&myBall2, &tab_bricks[bricksIterator]);
+    }
 
     myBall1.position = PointPlusVector(myBall1.position, myBall1.vector);
     myBall2.position = PointPlusVector(myBall2.position, myBall2.vector);

@@ -91,11 +91,102 @@ int collisionWithWindow(Ball ball) {
 	return 0;
 }
 
-int collisionWithBrick(Brick *brick, Ball *ball) {
-	/*if (brick->state) {
+// Cette fonction vérifie s'il y a collision avec une brique
+int collisionWithBrick(Ball *ball, Brick *brick) {
+	// Si la brique est encore "active" (non détruite)
+	if (brick->state > 0) {
+		int collision = 0;
+		// Top
+		if((ball->position.y-ball->radius) - brick->position.y >= -0.01 && (ball->position.y-ball->radius) - brick->position.y <= 0.01) {
+			/* Balle au centre */
+			if(ball->position.x == brick->position.x + brick->largeur/2) {
+				ball->vector.y *= -1;
+				collision = 1;
+			}
+			/* Balle à droite */
+			else if(ball->position.x > (brick->position.x + brick->largeur/2) && ball->position.x <= (brick->position.x + brick->largeur)) { // Balle à droite de la barre
+				ball->vector.x = 0.01;
+				ball->vector.y *= -1;
+				collision = 1;
+			}
+			/* Balle à gauche */
+			else if(ball->position.x < (brick->position.x + brick->largeur/2) && ball->position.x >= (brick->position.x)) { // Balle à gauche de la barre
+				ball->vector.x = -0.01;
+				ball->vector.y *= -1;
+				collision = 1;
+			}
+		}
+		// Bottom
+		if((ball->position.y+ball->radius) - (brick->position.y-brick->longueur) >= -0.01 && (ball->position.y+ball->radius) - (brick->position.y-brick->longueur) <= 0.01) {
+			/* Balle au centre */
+			if(ball->position.x == brick->position.x + brick->largeur/2) {
+				ball->vector.y *= -1;
+				collision = 1;
+			}
+			/* Balle à droite */
+			else if(ball->position.x > (brick->position.x + brick->largeur/2) && ball->position.x <= (brick->position.x + brick->largeur)) { // Balle à droite de la barre
+				ball->vector.x = 0.01;
+				ball->vector.y *= -1;
+				collision = 1;
+			}
+			/* Balle à gauche */
+			else if(ball->position.x < (brick->position.x + brick->largeur/2) && ball->position.x >= (brick->position.x)) { // Balle à gauche de la barre
+				ball->vector.x = -0.01;
+				ball->vector.y *= -1;
+				collision = 1;
+			}
+		}
 
-		// gestion
-		switch
-	}*/
+		// Left
+		if ((ball->position.x+ball->radius) - (brick->position.x) >= -0.01 && (ball->position.x+ball->radius) - (brick->position.x) <= 0.01) {
+			/* Balle en haut */
+			if (ball->position.y >= brick->position.y && ball->position.y <= brick->position.y - (brick->longueur/2)) {
+				ball->vector.x = -0.01;
+				ball->vector.y *= -1;
+				collision = 1;
+			}
+			/* Balle en bas */
+			else if (ball->position.y > brick->position.y - (brick->longueur/2) && ball->position.y <= brick->position.y - brick->longueur) {
+				ball->vector.x = -0.01;
+				ball->vector.y *= 1;
+				collision = 1;
+			}
+		}
+
+		// Right
+		if ((ball->position.x-ball->radius) - (brick->position.x+brick->largeur) >= -0.01 && (ball->position.x-ball->radius) - (brick->position.x+brick->largeur) <= 0.01) {
+			/* Balle en haut */
+			if (ball->position.y >= brick->position.y && ball->position.y <= brick->position.y - (brick->longueur/2)) {
+				ball->vector.x = 0.01;
+				ball->vector.y *= -1;
+				collision = 1;
+			}
+			/* Balle en bas */
+			else if (ball->position.y > brick->position.y - (brick->longueur/2) && ball->position.y <= brick->position.y - brick->longueur) {
+				ball->vector.x = 0.01;
+				ball->vector.y *= 1;
+				collision = 1;
+			}
+		}
+
+		if (collision) {
+			// Gestion de la brique en fonction de son type
+			switch (brick->type) {
+				case 0:
+					brick->state = 0;
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				default:
+					break;
+			}
+		}
+	}
 	return 0;
 }
