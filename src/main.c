@@ -79,8 +79,8 @@ int main(int argc, char** argv) {
   int barre_2_keyPressed_right = 0;
 
   // BARRES DE JEU
-  Bar myBar1 = createBar(0.5, 0.05, 1, joueur1.color, PointXY(0, -0.9));
-  Bar myBar2 = createBar(0.5, 0.05, 1, joueur2.color, PointXY(0, 0.9));
+  Bar myBar1 = createBar(0.4, 0.05, 1, joueur1.color, PointXY(0, -0.9));
+  Bar myBar2 = createBar(0.4, 0.05, 1, joueur2.color, PointXY(0, 0.9));
 
   // Vecteurs directeurs de déplacements des barres de jeu
   Vector vector_to_left = VectorXY(PointXY(0.025,0), PointXY(0,0));
@@ -140,20 +140,45 @@ int main(int argc, char** argv) {
   // Tableau de briques
   Brick tab_bricks[nb_brick_total];
 
-  float brick_space_y = (float)(WINDOW_HEIGHT/2)/WINDOW_HEIGHT;
-  float hauteur_brick = brick_space_y/nb_brick_y * 2;
-  float largeur_brick = (float)(WINDOW_WIDTH/nb_brick_x)/WINDOW_WIDTH * 2;
-  float brick_position_x = -0.999999;
-  float brick_position_y = 0.5;
+  float hauteur_brick = 0.1;
+  float largeur_brick = (float)2/nb_brick_x;
+  float brick_position_x = -1.0;
+  float brick_position_y = nb_brick_y*hauteur_brick/2;
   int i = 0;
   int j = 0;
   int count = 0;
+  Color3D colorBrick;
 
-  Color3D colorBrick = ColorXY(0, 255, 255);
   for (i = 0; i < nb_brick_x; i++) {
     for (j = 0; j < nb_brick_y; j++) {
+        switch(bricksType[count]) {
+          case 0: // Normal
+            colorBrick = ColorXY(200, 200, 200);
+            break;
+          case 1: // Indestructible
+            colorBrick = ColorXY(0, 0, 0);
+            break;
+          case 2: // Bonus 1 : agrandissement de la barre
+            colorBrick = ColorXY(0, 255, 0);
+            break;
+          case 3: // Bonus 2
+            colorBrick = ColorXY(0, 255, 0);
+            break;
+          case 4: // Bonus 3
+            colorBrick = ColorXY(0, 255, 0);
+            break;
+          case 5: // Bonus 4
+            colorBrick = ColorXY(0, 255, 0);
+            break;
+          case 6: // Malus
+            colorBrick = ColorXY(255, 0, 0);
+            break;
+          default: // Normal
+            colorBrick = ColorXY(200, 200, 200);
+            break;
+        }
       Point position_brick = PointXY(brick_position_x + largeur_brick * i, brick_position_y - hauteur_brick * j);
-      tab_bricks[count] = createBrick(largeur_brick, hauteur_brick, 0, 1, bricksType[count], colorBrick, position_brick);
+      tab_bricks[count] = createBrick(largeur_brick, hauteur_brick, 1, 1, bricksType[count], colorBrick, position_brick);
       count++;
     }
   }
@@ -209,7 +234,7 @@ int main(int argc, char** argv) {
     drawBall(myBall1);
     drawBall(myBall2);
 
-    /* Affichage de la barre de déplacement */
+    /* Affichage des barres de déplacement */
     drawBar(myBar1);
     drawBar(myBar2);
 
@@ -217,7 +242,6 @@ int main(int argc, char** argv) {
     for (count = 0; count < nb_brick_total; count++) {
       drawBrick(tab_bricks[count]);
     }
-    //drawBrick(tab_bricks[0]);
 
     /* Affichage des points de vie */
     if(joueur1.life != 0 && joueur2.life != 0)
@@ -242,12 +266,10 @@ int main(int argc, char** argv) {
     if(myBall1.position.y+myBall1.radius >= 1) {
       joueur2.life--;
       myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
-      myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
     }
     if(myBall1.position.y-myBall1.radius <= -1) {
       joueur1.life--;
       myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
-      myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
     }
 
     if(myBall2.position.x+myBall2.radius >= 1 || myBall2.position.x-myBall2.radius <= -1) {
@@ -255,12 +277,10 @@ int main(int argc, char** argv) {
     }
     if(myBall2.position.y+myBall2.radius >= 1) {
       joueur2.life--;
-      myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
       myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
     }
     if(myBall2.position.y-myBall2.radius <= -1) {
       joueur1.life--;
-      myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
       myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
     }
 
@@ -272,8 +292,8 @@ int main(int argc, char** argv) {
     //collisionWithBrick(&myBall1, &tab_bricks[0]);
 
     for (bricksIterator = 0; bricksIterator < nb_brick_total; bricksIterator++) {
-      collisionWithBrick(&myBall1, &tab_bricks[bricksIterator]);
-      collisionWithBrick(&myBall2, &tab_bricks[bricksIterator]);
+      collisionWithBrick(&myBall1, &tab_bricks[bricksIterator], &myBar1, &myBar2);
+      collisionWithBrick(&myBall2, &tab_bricks[bricksIterator], &myBar1, &myBar2);
     }
 
     myBall1.position = PointPlusVector(myBall1.position, myBall1.vector);

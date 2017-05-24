@@ -92,10 +92,11 @@ int collisionWithWindow(Ball ball) {
 }
 
 // Cette fonction vérifie s'il y a collision avec une brique
-int collisionWithBrick(Ball *ball, Brick *brick) {
+int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2) {
 	// Si la brique est encore "active" (non détruite)
 	if (brick->state > 0) {
 		int collision = 0;
+
 		// Top
 		if((ball->position.y-ball->radius) - brick->position.y >= -0.01 && (ball->position.y-ball->radius) - brick->position.y <= 0.01) {
 			/* Balle au centre */
@@ -116,6 +117,7 @@ int collisionWithBrick(Ball *ball, Brick *brick) {
 				collision = 1;
 			}
 		}
+
 		// Bottom
 		if((ball->position.y+ball->radius) - (brick->position.y-brick->longueur) >= -0.01 && (ball->position.y+ball->radius) - (brick->position.y-brick->longueur) <= 0.01) {
 			/* Balle au centre */
@@ -172,16 +174,32 @@ int collisionWithBrick(Ball *ball, Brick *brick) {
 		if (collision) {
 			// Gestion de la brique en fonction de son type
 			switch (brick->type) {
-				case 0:
+				case 0: // Normal
 					brick->state = 0;
 					break;
-				case 1:
+				case 1: // Indestructible
+					brick->state = 1;
 					break;
-				case 2:
+				case 2: // Bonus 1 : agrandissement de la barre
+					if(ball->vector.y < 0) { // joueur1
+						bar1->largeur += 0.2;
+					}
+					else {
+						bar2->largeur += 0.2;
+					}
+					brick->state = 0;
 					break;
-				case 3:
+				case 3: // Bonus 2
+					brick->state = 0;
 					break;
-				case 4:
+				case 4: // Bonus 3
+					brick->state = 0;
+					break;
+				case 5: // Bonus 4
+					brick->state = 0;
+					break;
+				case 6: // Malus
+					brick->state = 0;
 					break;
 				default:
 					break;
