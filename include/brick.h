@@ -4,10 +4,9 @@
 typedef struct Brick {
 	float largeur;
 	float longueur;
-	int full;
 	int state;
 	int type;
-	Color3D color;
+	GLuint texture;
 	Point position;
 } Brick;
 
@@ -16,8 +15,6 @@ typedef struct TableBrick {
 	Brick *next;
 } TableBrick;
 
-Brick createBrick(float largeur, float longueur, int full, int state, int type, Color3D color, Point position);
-
-void drawBrick(Brick brick);
+Brick createBrick(float largeur, float longueur, int state, int type, GLuint texture, Point position);
 
 #endif

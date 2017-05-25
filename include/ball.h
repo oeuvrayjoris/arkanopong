@@ -4,6 +4,7 @@
 #include "geometry.h"
 #include "bar.h"
 #include "brick.h"
+#include "player.h"
 
 typedef struct Ball {
 	float radius;
@@ -22,6 +23,6 @@ int collisionWithBar(Ball *ball, Bar bar, int onTop);
 
 int collisionWithWindow(Ball ball);
 
-int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2);
+int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2, Player *joueur1, Player *joueur2);
 
 #endif

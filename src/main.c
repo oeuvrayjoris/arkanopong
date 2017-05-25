@@ -69,6 +69,34 @@ int main(int argc, char** argv) {
   Ball myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
   Ball myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
 
+  // IMAGE
+
+  GLuint texture_coeur;
+  SDL_Surface *image_coeur = IMG_Load("images/coeur.png");
+  if(image_coeur == NULL)
+    printf("Erreur, l'image n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_coeur);
+  glBindTexture(GL_TEXTURE_2D, texture_coeur);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_coeur);
+  GLenum format;
+  switch(image_coeur->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_coeur->w, image_coeur->h, 0, format, GL_UNSIGNED_BYTE, image_coeur->pixels);
+
+
+
   //************************************
 
   // Variables pour les barres de jeu
@@ -147,38 +175,188 @@ int main(int argc, char** argv) {
   int i = 0;
   int j = 0;
   int count = 0;
-  Color3D colorBrick;
+
+  // Chargement des textures
+  GLuint texture;
+  SDL_Surface *image_normal = IMG_Load("images/normal.jpg");
+  if(image_normal == NULL) {
+    printf("Erreur, l'image normal.jpg n'a pas pu être chargée\n");
+  }
+  SDL_Surface *image_indestructible = IMG_Load("images/indestructible.jpg");
+  if(image_indestructible == NULL) {
+    printf("Erreur, l'image indestructible.jpg n'a pas pu être chargée\n");
+  }
+  SDL_Surface *image_bonus1 = IMG_Load("images/bonus_1.jpg");
+  if(image_bonus1 == NULL) {
+    printf("Erreur, l'image bonus_1.jpg n'a pas pu être chargée\n");
+  }
+  SDL_Surface *image_bonus2 = IMG_Load("images/bonus_2.jpg");
+  if(image_bonus2 == NULL) {
+    printf("Erreur, l'image bonus_2.jpg n'a pas pu être chargée\n");
+  }
+  SDL_Surface *image_bonus3 = IMG_Load("images/bonus_3.jpg");
+  if(image_bonus3 == NULL) {
+    printf("Erreur, l'image bonus_3.jpg n'a pas pu être chargée\n");
+  }
+  SDL_Surface *image_bonus4 = IMG_Load("images/bonus_4.jpg");
+  if(image_bonus4 == NULL) {
+    printf("Erreur, l'image bonus_4.jpg n'a pas pu être chargée\n");
+  }
 
   for (i = 0; i < nb_brick_x; i++) {
     for (j = 0; j < nb_brick_y; j++) {
         switch(bricksType[count]) {
           case 0: // Normal
-            colorBrick = ColorXY(200, 200, 200);
-            break;
+              glGenTextures(1, &texture);
+              glBindTexture(GL_TEXTURE_2D, texture);
+              glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+              glBindTexture(0, texture);
+
+              switch(image_normal->format->BytesPerPixel) {
+                case 1:
+                  format = GL_RED;
+                  break;
+                case 3:
+                  format = GL_RGB;
+                  break;
+                case 4:
+                  format = GL_RGBA;
+                  break;
+                default:
+                  return EXIT_FAILURE;
+              }
+              glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_normal->w, image_normal->h, 0, format, GL_UNSIGNED_BYTE, image_normal->pixels);
+              break;
           case 1: // Indestructible
-            colorBrick = ColorXY(0, 0, 0);
-            break;
+              glGenTextures(1, &texture);
+              glBindTexture(GL_TEXTURE_2D, texture);
+              glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+              glBindTexture(0, texture);
+
+              switch(image_indestructible->format->BytesPerPixel) {
+                case 1:
+                  format = GL_RED;
+                  break;
+                case 3:
+                  format = GL_RGB;
+                  break;
+                case 4:
+                  format = GL_RGBA;
+                  break;
+                default:
+                  return EXIT_FAILURE;
+              }
+              glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_indestructible->w, image_indestructible->h, 0, format, GL_UNSIGNED_BYTE, image_indestructible->pixels);
+              break;
           case 2: // Bonus 1 : agrandissement de la barre
-            colorBrick = ColorXY(0, 255, 0);
-            break;
-          case 3: // Bonus 2
-            colorBrick = ColorXY(0, 255, 0);
-            break;
-          case 4: // Bonus 3
-            colorBrick = ColorXY(0, 255, 0);
-            break;
-          case 5: // Bonus 4
-            colorBrick = ColorXY(0, 255, 0);
-            break;
-          case 6: // Malus
-            colorBrick = ColorXY(255, 0, 0);
-            break;
-          default: // Normal
-            colorBrick = ColorXY(200, 200, 200);
-            break;
+              
+              glGenTextures(1, &texture);
+              glBindTexture(GL_TEXTURE_2D, texture);
+              glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+              glBindTexture(0, texture);
+
+              switch(image_bonus1->format->BytesPerPixel) {
+                case 1:
+                  format = GL_RED;
+                  break;
+                case 3:
+                  format = GL_RGB;
+                  break;
+                case 4:
+                  format = GL_RGBA;
+                  break;
+                default:
+                  return EXIT_FAILURE;
+              }
+              glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_bonus1->w, image_bonus1->h, 0, format, GL_UNSIGNED_BYTE, image_bonus1->pixels);
+              break;
+          case 3: // Bonus 2 : ajout d'un point de vie
+              glGenTextures(1, &texture);
+              glBindTexture(GL_TEXTURE_2D, texture);
+              glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+              glBindTexture(0, texture);
+
+              switch(image_bonus2->format->BytesPerPixel) {
+                case 1:
+                  format = GL_RED;
+                  break;
+                case 3:
+                  format = GL_RGB;
+                  break;
+                case 4:
+                  format = GL_RGBA;
+                  break;
+                default:
+                  return EXIT_FAILURE;
+              }
+              glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_bonus2->w, image_bonus2->h, 0, format, GL_UNSIGNED_BYTE, image_bonus2->pixels);
+              break;
+          case 4: // Bonus 3 : suppression d'un point de vie à l'adversaire
+              glGenTextures(1, &texture);
+              glBindTexture(GL_TEXTURE_2D, texture);
+              glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+              glBindTexture(0, texture);
+
+              switch(image_bonus3->format->BytesPerPixel) {
+                case 1:
+                  format = GL_RED;
+                  break;
+                case 3:
+                  format = GL_RGB;
+                  break;
+                case 4:
+                  format = GL_RGBA;
+                  break;
+                default:
+                  return EXIT_FAILURE;
+              }
+              glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_bonus3->w, image_bonus3->h, 0, format, GL_UNSIGNED_BYTE, image_bonus3->pixels);
+              break;
+          case 5: // Bonus 4 : ajout d'une 3e balle
+              glGenTextures(1, &texture);
+              glBindTexture(GL_TEXTURE_2D, texture);
+              glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+              glBindTexture(0, texture);
+
+              switch(image_bonus4->format->BytesPerPixel) {
+                case 1:
+                  format = GL_RED;
+                  break;
+                case 3:
+                  format = GL_RGB;
+                  break;
+                case 4:
+                  format = GL_RGBA;
+                  break;
+                default:
+                  return EXIT_FAILURE;
+              }
+              glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_bonus4->w, image_bonus4->h, 0, format, GL_UNSIGNED_BYTE, image_bonus4->pixels);
+              break;
+          default:
+              glGenTextures(1, &texture);
+              glBindTexture(GL_TEXTURE_2D, texture);
+              glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+              glBindTexture(0, texture);
+
+              switch(image_normal->format->BytesPerPixel) {
+                case 1:
+                  format = GL_RED;
+                  break;
+                case 3:
+                  format = GL_RGB;
+                  break;
+                case 4:
+                  format = GL_RGBA;
+                  break;
+                default:
+                  return EXIT_FAILURE;
+              }
+              glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_normal->w, image_normal->h, 0, format, GL_UNSIGNED_BYTE, image_normal->pixels);
+              break;
         }
       Point position_brick = PointXY(brick_position_x + largeur_brick * i, brick_position_y - hauteur_brick * j);
-      tab_bricks[count] = createBrick(largeur_brick, hauteur_brick, 1, 1, bricksType[count], colorBrick, position_brick);
+      tab_bricks[count] = createBrick(largeur_brick, hauteur_brick, 1, bricksType[count], texture, position_brick);
       count++;
     }
   }
@@ -224,7 +402,7 @@ int main(int argc, char** argv) {
 
     /* Dessin */
     
-    glClearColor(255, 255, 255, 1); // Fond en blanc
+    glClearColor(0.25, 0.24, 0.30, 1); // Fond en blanc
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Reperes
@@ -240,12 +418,12 @@ int main(int argc, char** argv) {
 
     /* Affichage des briques */
     for (count = 0; count < nb_brick_total; count++) {
-      drawBrick(tab_bricks[count]);
+      draw_brick(tab_bricks[count]);
     }
 
     /* Affichage des points de vie */
     if(joueur1.life != 0 && joueur2.life != 0)
-      image_coeur(joueur1.life, joueur2.life);
+      draw_coeur(texture_coeur, joueur1.life, joueur2.life);
     else {
       myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
       myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
@@ -292,8 +470,8 @@ int main(int argc, char** argv) {
     //collisionWithBrick(&myBall1, &tab_bricks[0]);
 
     for (bricksIterator = 0; bricksIterator < nb_brick_total; bricksIterator++) {
-      collisionWithBrick(&myBall1, &tab_bricks[bricksIterator], &myBar1, &myBar2);
-      collisionWithBrick(&myBall2, &tab_bricks[bricksIterator], &myBar1, &myBar2);
+      collisionWithBrick(&myBall1, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2);
+      collisionWithBrick(&myBall2, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2);
     }
 
     myBall1.position = PointPlusVector(myBall1.position, myBall1.vector);

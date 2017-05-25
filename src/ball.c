@@ -9,6 +9,7 @@
 #include "ball.h"
 #include "bar.h"
 #include "brick.h"
+#include "player.h"
 
 Ball createBall(float radius, int full, Color3D color, Point position, Vector vector) {
 	Ball ball;
@@ -92,7 +93,8 @@ int collisionWithWindow(Ball ball) {
 }
 
 // Cette fonction vérifie s'il y a collision avec une brique
-int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2) {
+int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2, Player *joueur1, Player *joueur2) {
+
 	// Si la brique est encore "active" (non détruite)
 	if (brick->state > 0) {
 		int collision = 0;
@@ -189,19 +191,35 @@ int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2) {
 					}
 					brick->state = 0;
 					break;
-				case 3: // Bonus 2
+				case 3: // Bonus 2 : ajout d'un point de vie
+					if(ball->vector.y < 0) { // joueur1
+						joueur1->life += 1;
+					}
+					else {
+						joueur2->life += 1;
+					}
 					brick->state = 0;
 					break;
-				case 4: // Bonus 3
+				case 4: // Bonus 3 : suppression d'un point de vie à l'adversaire
+					if(ball->vector.y < 0) { // joueur1
+						joueur2->life -= 1;
+					}
+					else {
+						joueur1->life -= 1;
+					}
 					brick->state = 0;
 					break;
-				case 5: // Bonus 4
-					brick->state = 0;
-					break;
-				case 6: // Malus
+				case 5: // Bonus 4 : ajout d'une 3e balle
+					if(ball->vector.y < 0) { // joueur1
+						Ball myBall3 = createBall(0.025, 1, ColorXY(255, 0, 0), PointXY(0, 0.75), VectorXY(PointXY(0, 0), PointXY(0, -0.005)));
+					}
+					else {
+						Ball myBall3 = createBall(0.025, 1, ColorXY(255, 0, 255), PointXY(0, -0.75), VectorXY(PointXY(0, 0), PointXY(0, 0.005)));
+					}
 					brick->state = 0;
 					break;
 				default:
+					brick->state = 0;
 					break;
 			}
 		}
