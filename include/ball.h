@@ -9,20 +9,21 @@
 typedef struct Ball {
 	float radius;
 	int full;
+	int state;
 	Color3D color;
 	Point position;
 	Vector vector;
 } Ball;
 
 
-Ball createBall(float radius, int full, Color3D color, Point position, Vector vector);
+Ball createBall(float radius, int full, int state, Color3D color, Point position, Vector vector);
 
 void drawBall(Ball ball);
 
 int collisionWithBar(Ball *ball, Bar bar, int onTop);
 
-int collisionWithWindow(Ball ball);
+void collisionWithWindow(Ball *ball, Player *joueur1, Player *joueur2, int ballNumber);
 
-int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2, Player *joueur1, Player *joueur2);
+int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2, Player *joueur1, Player *joueur2, Ball *ballSup);
 
 #endif

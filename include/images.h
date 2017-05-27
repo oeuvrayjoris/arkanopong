@@ -1,5 +1,5 @@
-#ifndef DRAWING_H_
-#define DRAWING_H_
+#ifndef IMAGES_H_
+#define IMAGES_H_
 
 #include "brick.h"
 

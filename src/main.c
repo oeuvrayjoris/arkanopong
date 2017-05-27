@@ -66,8 +66,9 @@ int main(int argc, char** argv) {
   Point initPoint_2 = PointXY(0, -0.75);
   float radius = 0.025;
 
-  Ball myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
-  Ball myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+  Ball myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+  Ball myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+  Ball myBall3 = createBall(radius, 1, 0, ColorXY(115, 0, 80), PointXY(0, 0), VectorXY(PointXY(0, 0), PointXY(0, 0))); 
 
   // IMAGE
 
@@ -94,8 +95,6 @@ int main(int argc, char** argv) {
       return EXIT_FAILURE;
   }
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_coeur->w, image_coeur->h, 0, format, GL_UNSIGNED_BYTE, image_coeur->pixels);
-
-
 
   //************************************
 
@@ -361,8 +360,7 @@ int main(int argc, char** argv) {
     }
   }
 
-  printf("-- %.3f - %.3f - %.3f\n", tab_bricks[0].position.x, myBall1.position.x+myBall1.radius - 1, tab_bricks[0].position.x - (myBall1.position.x+myBall1.radius-1) );
-  //printf("-- %.3f\n", tab_bricks[0].position.y + myBall1.position.x+myBall1.radius);
+  //printf("-- %.3f - %.3f - %.3f\n", tab_bricks[0].position.x, myBall1.position.x+myBall1.radius - 1, tab_bricks[0].position.x - (myBall1.position.x+myBall1.radius-1) );
 
   //printf("-- %.3f -- %.3f\n", hauteur_brick, tab_bricks[2].position.x);
   //affiche_tab(bricksType, nb_brick_total);
@@ -410,8 +408,10 @@ int main(int argc, char** argv) {
     //drawReperes();
 
     /* Affichage de la balle */
+
     drawBall(myBall1);
     drawBall(myBall2);
+    drawBall(myBall3);
 
     /* Affichage des barres de déplacement */
     drawBar(myBar1);
@@ -426,8 +426,8 @@ int main(int argc, char** argv) {
     if(joueur1.life != 0 && joueur2.life != 0)
       draw_coeur(texture_coeur, joueur1.life, joueur2.life);
     else {
-      myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
-      myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+      myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+      myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
      if(joueur1.life == 0) {
         joueur1.life = 3;
         joueur2.score++;
@@ -444,11 +444,11 @@ int main(int argc, char** argv) {
     }
     if(myBall1.position.y+myBall1.radius >= 1) {
       joueur2.life--;
-      myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+      myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
     }
     if(myBall1.position.y-myBall1.radius <= -1) {
       joueur1.life--;
-      myBall1 = createBall(radius, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+      myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
     }
 
     if(myBall2.position.x+myBall2.radius >= 1 || myBall2.position.x-myBall2.radius <= -1) {
@@ -456,23 +456,37 @@ int main(int argc, char** argv) {
     }
     if(myBall2.position.y+myBall2.radius >= 1) {
       joueur2.life--;
-      myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+      myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
     }
     if(myBall2.position.y-myBall2.radius <= -1) {
       joueur1.life--;
-      myBall2 = createBall(radius, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+      myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
     }
+
+    if (myBall3.state == 1) {
+      // Balle 3
+      if(myBall3.position.x+myBall3.radius >= 1 || myBall3.position.x-myBall3.radius <= -1) {
+          myBall3.vector.x *= -1;
+      }
+    }
+
+    /*
+    collisionWithWindow(&myBall1, &joueur1, &joueur2, 1);
+    collisionWithWindow(&myBall2, &joueur1, &joueur2, 2);
+    collisionWithWindow(&myBall3, &joueur1, &joueur2, 3);
+    */
 
     collisionWithBar(&myBall1, myBar1, 1);
     collisionWithBar(&myBall1, myBar2, 0);
     collisionWithBar(&myBall2, myBar1, 1);
     collisionWithBar(&myBall2, myBar2, 0);
-
-    //collisionWithBrick(&myBall1, &tab_bricks[0]);
+    collisionWithBar(&myBall3, myBar1, 1);
+    collisionWithBar(&myBall3, myBar2, 0);
 
     for (bricksIterator = 0; bricksIterator < nb_brick_total; bricksIterator++) {
-      collisionWithBrick(&myBall1, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2);
-      collisionWithBrick(&myBall2, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2);
+      collisionWithBrick(&myBall1, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
+      collisionWithBrick(&myBall2, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
+      collisionWithBrick(&myBall3, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
     }
 
     myBall1.position = PointPlusVector(myBall1.position, myBall1.vector);
@@ -519,7 +533,6 @@ int main(int argc, char** argv) {
           barre_1_keyPressed_right = e.key.state;
           barre_2_keyPressed_left = e.key.state;
           barre_2_keyPressed_right = e.key.state;
-
           break;
           
         default:
