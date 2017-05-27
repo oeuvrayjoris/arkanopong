@@ -361,7 +361,8 @@ int main(int argc, char** argv) {
     }
   }
 
-  printf("-- %.3f\n",(tab_bricks[0].position.y-tab_bricks[0].longueur));
+  printf("-- %.3f - %.3f - %.3f\n", tab_bricks[0].position.x, myBall1.position.x+myBall1.radius - 1, tab_bricks[0].position.x - (myBall1.position.x+myBall1.radius-1) );
+  //printf("-- %.3f\n", tab_bricks[0].position.y + myBall1.position.x+myBall1.radius);
 
   //printf("-- %.3f -- %.3f\n", hauteur_brick, tab_bricks[2].position.x);
   //affiche_tab(bricksType, nb_brick_total);

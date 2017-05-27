@@ -141,16 +141,18 @@ int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2, Player *j
 			}
 		}
 
+		//printf("%.3f\n", (ball->position.x+ball->radius) - (brick->position.x));
+
 		// Left
-		if ((ball->position.x+ball->radius) - (brick->position.x) >= -0.01 && (ball->position.x+ball->radius) - (brick->position.x) <= 0.01) {
+		if ((ball->position.x+ball->radius) - (brick->position.x) >= -0.025 && (ball->position.x-ball->radius) - (brick->position.x) <= 0.025) {
 			/* Balle en haut */
-			if (ball->position.y >= brick->position.y && ball->position.y <= brick->position.y - (brick->longueur/2)) {
+			if (ball->position.y <= brick->position.y && ball->position.y >= brick->position.y - (brick->longueur/2)) {
 				ball->vector.x = -0.01;
 				ball->vector.y *= -1;
 				collision = 1;
 			}
 			/* Balle en bas */
-			else if (ball->position.y > brick->position.y - (brick->longueur/2) && ball->position.y <= brick->position.y - brick->longueur) {
+			else if (ball->position.y < brick->position.y - (brick->longueur/2) && ball->position.y >= brick->position.y - brick->longueur) {
 				ball->vector.x = -0.01;
 				ball->vector.y *= 1;
 				collision = 1;
@@ -158,15 +160,15 @@ int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2, Player *j
 		}
 
 		// Right
-		if ((ball->position.x-ball->radius) - (brick->position.x+brick->largeur) >= -0.01 && (ball->position.x-ball->radius) - (brick->position.x+brick->largeur) <= 0.01) {
+		if ((ball->position.x+ball->radius) - (brick->position.x+brick->largeur) >= -0.025 && (ball->position.x+ball->radius) - (brick->position.x+brick->largeur) <= 0.025) {
 			/* Balle en haut */
-			if (ball->position.y >= brick->position.y && ball->position.y <= brick->position.y - (brick->longueur/2)) {
+			if (ball->position.y <= brick->position.y && ball->position.y >= brick->position.y - (brick->longueur/2)) {
 				ball->vector.x = 0.01;
 				ball->vector.y *= -1;
 				collision = 1;
 			}
 			/* Balle en bas */
-			else if (ball->position.y > brick->position.y - (brick->longueur/2) && ball->position.y <= brick->position.y - brick->longueur) {
+			else if (ball->position.y < brick->position.y - (brick->longueur/2) && ball->position.y >= brick->position.y - brick->longueur) {
 				ball->vector.x = 0.01;
 				ball->vector.y *= 1;
 				collision = 1;
