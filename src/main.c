@@ -539,7 +539,6 @@ int main(int argc, char** argv) {
                 statut = 1;
             }
             if (e.key.keysym.sym == SDLK_KP_ENTER || e.key.keysym.sym == SDLK_RETURN) {
-              printf("Touche entrée !\n");
               affichage = statut;
             }
             break;
