@@ -100,3 +100,76 @@ void draw_brick(Brick brick) {
 		glPopMatrix();
 	}
 }
+
+void draw_menuprincipal(int statut, GLuint texture_arkanopong, GLuint texture_1player, GLuint texture_1playerhover, GLuint texture_2player, GLuint texture_2playerhover) {
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+
+    // ARKANOPONG
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture_arkanopong);
+
+	glPushMatrix();
+	glTranslatef(0, 0.5, 0);
+    glBegin(GL_QUADS);
+      glTexCoord2f(0, 0);
+      glVertex2f(-0.5, 0.1);
+      glTexCoord2f(1, 0);
+      glVertex2f(0.5, 0.1);
+      glTexCoord2f(1, 1);
+      glVertex2f(0.5, -0.1);
+      glTexCoord2f(0, 1);
+      glVertex2f(-0.5, -0.1);
+    glEnd();
+	glPopMatrix();
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+
+	// 1 JOUEUR
+	glEnable(GL_TEXTURE_2D);
+    if(statut == 0 || statut == 2)
+    	glBindTexture(GL_TEXTURE_2D, texture_1player);
+    else if(statut == 1)
+    	glBindTexture(GL_TEXTURE_2D, texture_1playerhover);
+	glPushMatrix();
+    glBegin(GL_QUADS);
+      glTexCoord2f(0, 0);
+      glVertex2f(-0.3, 0.05);
+      glTexCoord2f(1, 0);
+      glVertex2f(0.3, 0.05);
+      glTexCoord2f(1, 1);
+      glVertex2f(0.3, -0.05);
+      glTexCoord2f(0, 1);
+      glVertex2f(-0.3, -0.05);
+    glEnd();
+	glPopMatrix();
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+
+	// 2 JOUEURS
+	glEnable(GL_TEXTURE_2D);
+	if(statut == 0 || statut == 1)
+    	glBindTexture(GL_TEXTURE_2D, texture_2player);
+    else if(statut == 2)
+    	glBindTexture(GL_TEXTURE_2D, texture_2playerhover);
+
+	glPushMatrix();
+	glTranslatef(0, -0.2, 0);
+    glBegin(GL_QUADS);
+      glTexCoord2f(0, 0);
+      glVertex2f(-0.3, 0.05);
+      glTexCoord2f(1, 0);
+      glVertex2f(0.3, 0.05);
+      glTexCoord2f(1, 1);
+      glVertex2f(0.3, -0.05);
+      glTexCoord2f(0, 1);
+      glVertex2f(-0.3, -0.05);
+    glEnd();
+	glPopMatrix();
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+}

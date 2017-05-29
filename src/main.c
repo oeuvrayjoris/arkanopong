@@ -40,6 +40,7 @@ void setVideoMode(unsigned int width, unsigned int height) {
 int main(int argc, char** argv) {
   unsigned int WINDOW_WIDTH = 500;
   unsigned int WINDOW_HEIGHT = 500;
+  int affichage = 0;
 
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
@@ -70,7 +71,7 @@ int main(int argc, char** argv) {
   Ball myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
   Ball myBall3 = createBall(radius, 1, 0, ColorXY(115, 0, 80), PointXY(0, 0), VectorXY(PointXY(0, 0), PointXY(0, 0))); 
 
-  // IMAGE
+  // IMAGE COEUR
 
   GLuint texture_coeur;
   SDL_Surface *image_coeur = IMG_Load("images/coeur.png");
@@ -95,6 +96,131 @@ int main(int argc, char** argv) {
       return EXIT_FAILURE;
   }
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_coeur->w, image_coeur->h, 0, format, GL_UNSIGNED_BYTE, image_coeur->pixels);
+
+  // IMAGE LOGO ARKANOPONG
+
+  GLuint texture_arkanopong;
+  SDL_Surface *image_arkanopong = IMG_Load("images/arkanopong.jpg");
+  if(image_arkanopong == NULL)
+    printf("Erreur, l'image n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_arkanopong);
+  glBindTexture(GL_TEXTURE_2D, texture_arkanopong);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_arkanopong);
+  switch(image_arkanopong->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_arkanopong->w, image_arkanopong->h, 0, format, GL_UNSIGNED_BYTE, image_arkanopong->pixels);
+
+  // IMAGE BOUTON 1 JOUEUR
+
+  GLuint texture_1player;
+  SDL_Surface *image_1player = IMG_Load("images/1-joueur.jpg");
+  if(image_1player == NULL)
+    printf("Erreur, l'image n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_1player);
+  glBindTexture(GL_TEXTURE_2D, texture_1player);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_1player);
+  switch(image_1player->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_1player->w, image_1player->h, 0, format, GL_UNSIGNED_BYTE, image_1player->pixels);
+
+  // IMAGE BOUTON 1 JOUEUR HOVER
+
+  GLuint texture_1playerhover;
+  SDL_Surface *image_1playerhover = IMG_Load("images/1-joueur-hover.jpg");
+  if(image_1playerhover == NULL)
+    printf("Erreur, l'image n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_1playerhover);
+  glBindTexture(GL_TEXTURE_2D, texture_1playerhover);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_1playerhover);
+  switch(image_1playerhover->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_1playerhover->w, image_1playerhover->h, 0, format, GL_UNSIGNED_BYTE, image_1playerhover->pixels);
+
+  // IMAGE BOUTON 2 JOUEURS
+
+  GLuint texture_2player;
+  SDL_Surface *image_2player = IMG_Load("images/2-joueurs.jpg");
+  if(image_2player == NULL)
+    printf("Erreur, l'image n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_2player);
+  glBindTexture(GL_TEXTURE_2D, texture_2player);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_2player);
+  switch(image_2player->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_2player->w, image_2player->h, 0, format, GL_UNSIGNED_BYTE, image_2player->pixels);
+
+// IMAGE BOUTON 2 JOUEURS HOVER
+
+  GLuint texture_2playerhover;
+  SDL_Surface *image_2playerhover = IMG_Load("images/2-joueurs-hover.jpg");
+  if(image_2playerhover == NULL)
+    printf("Erreur, l'image n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_2playerhover);
+  glBindTexture(GL_TEXTURE_2D, texture_2playerhover);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_2playerhover);
+  switch(image_2playerhover->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_2playerhover->w, image_2playerhover->h, 0, format, GL_UNSIGNED_BYTE, image_2playerhover->pixels);
 
   //************************************
 
@@ -366,178 +492,239 @@ int main(int argc, char** argv) {
   //affiche_tab(bricksType, nb_brick_total);
 
   //************************************
-
+  int statut = 1;
   int loop = 1;
   while(loop) {
     Uint32 startTime = SDL_GetTicks();
 
-    /* Déplacement de la barre 1 */
-    if (barre_1_keyPressed_left) {
-      if (myBar1.position.x > -0.75) {
-        Point newPosition = PointPlusVector(myBar1.position, vector_to_left);
-        myBar1.position = newPosition;
-      }
-    }
-    if (barre_1_keyPressed_right) {
-      if (myBar1.position.x < 0.75) {
-        Point newPosition = PointPlusVector(myBar1.position, vector_to_right);
-        myBar1.position = newPosition;
-      }
-    }
-
-    /* Déplacement de la barre 2 */
-    if (barre_2_keyPressed_left) {
-      if (myBar2.position.x > -0.75) {
-        Point newPosition = PointPlusVector(myBar2.position, vector_to_left);
-        myBar2.position = newPosition;
-      }
-    }
-    if (barre_2_keyPressed_right) {
-      if (myBar2.position.x < 0.75) {
-        Point newPosition = PointPlusVector(myBar2.position, vector_to_right);
-        myBar2.position = newPosition;
-      }
-    }
-
-    /* Dessin */
-    
-    glClearColor(0.25, 0.24, 0.30, 1); // Fond en blanc
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    // Reperes
-    //drawReperes();
-
-    /* Affichage de la balle */
-
-    drawBall(myBall1);
-    drawBall(myBall2);
-    drawBall(myBall3);
-
-    /* Affichage des barres de déplacement */
-    drawBar(myBar1);
-    drawBar(myBar2);
-
-    /* Affichage des briques */
-    for (count = 0; count < nb_brick_total; count++) {
-      draw_brick(tab_bricks[count]);
-    }
-
-    /* Affichage des points de vie */
-    if(joueur1.life != 0 && joueur2.life != 0)
-      draw_coeur(texture_coeur, joueur1.life, joueur2.life);
-    else {
-      myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
-      myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
-     if(joueur1.life == 0) {
-        joueur1.life = 3;
-        joueur2.score++;
-      }
-      if(joueur2.life == 0) {
-        joueur2.life = 3;
-        joueur1.score++;
-      }
-    }
-
-    /* Collision avec les bords de la fenêtre */
-    if(myBall1.position.x+myBall1.radius >= 1 || myBall1.position.x-myBall1.radius <= -1) {
-        myBall1.vector.x *= -1;
-    }
-    if(myBall1.position.y+myBall1.radius >= 1) {
-      joueur2.life--;
-      myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
-    }
-    if(myBall1.position.y-myBall1.radius <= -1) {
-      joueur1.life--;
-      myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
-    }
-
-    if(myBall2.position.x+myBall2.radius >= 1 || myBall2.position.x-myBall2.radius <= -1) {
-        myBall2.vector.x *= -1;
-    }
-    if(myBall2.position.y+myBall2.radius >= 1) {
-      joueur2.life--;
-      myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
-    }
-    if(myBall2.position.y-myBall2.radius <= -1) {
-      joueur1.life--;
-      myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
-    }
-
-    if (myBall3.state == 1) {
-      // Balle 3
-      if(myBall3.position.x+myBall3.radius >= 1 || myBall3.position.x-myBall3.radius <= -1) {
-          myBall3.vector.x *= -1;
-      }
-    }
-
-    /*
-    collisionWithWindow(&myBall1, &joueur1, &joueur2, 1);
-    collisionWithWindow(&myBall2, &joueur1, &joueur2, 2);
-    collisionWithWindow(&myBall3, &joueur1, &joueur2, 3);
-    */
-
-    collisionWithBar(&myBall1, myBar1, 1);
-    collisionWithBar(&myBall1, myBar2, 0);
-    collisionWithBar(&myBall2, myBar1, 1);
-    collisionWithBar(&myBall2, myBar2, 0);
-    collisionWithBar(&myBall3, myBar1, 1);
-    collisionWithBar(&myBall3, myBar2, 0);
-
-    for (bricksIterator = 0; bricksIterator < nb_brick_total; bricksIterator++) {
-      collisionWithBrick(&myBall1, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
-      collisionWithBrick(&myBall2, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
-      collisionWithBrick(&myBall3, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
-    }
-
-    myBall1.position = PointPlusVector(myBall1.position, myBall1.vector);
-    myBall2.position = PointPlusVector(myBall2.position, myBall2.vector);
-
-    SDL_GL_SwapBuffers();
-
-    /* ****** */    
-
-    SDL_Event e;
-    while(SDL_PollEvent(&e)) {
-      if(e.type == SDL_QUIT) {
-        loop = 0;
-        break;
-      }
+    if(affichage == 0) { // MENU PRINCIPAL
       
-      switch(e.type) {          
-        case SDL_VIDEORESIZE:
-          WINDOW_WIDTH = e.resize.w;
-          WINDOW_HEIGHT = e.resize.h;
-          setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
-          break;
+      glClearColor(0.25, 0.24, 0.30, 1);
+      glClear(GL_COLOR_BUFFER_BIT);
 
-        case SDL_KEYDOWN:
-          if (e.key.keysym.sym == 'q' || e.key.keysym.sym == SDLK_ESCAPE) {
-            loop = 0;
-          }
-          if (e.key.keysym.sym == SDLK_LEFT) {
-              barre_1_keyPressed_left = e.key.state;
-          }
-          if (e.key.keysym.sym == SDLK_RIGHT) {
-              barre_1_keyPressed_right = e.key.state;
-          }
-          if (e.key.keysym.sym == SDLK_a) {
-              barre_2_keyPressed_left = e.key.state;
-          }
-          if (e.key.keysym.sym == SDLK_z) {
-              barre_2_keyPressed_right = e.key.state;
-          }
-          break;
+      draw_menuprincipal(statut, texture_arkanopong, texture_1player, texture_1playerhover, texture_2player, texture_2playerhover);
 
-        case SDL_KEYUP:          
-          barre_1_keyPressed_left = e.key.state;
-          barre_1_keyPressed_right = e.key.state;
-          barre_2_keyPressed_left = e.key.state;
-          barre_2_keyPressed_right = e.key.state;
+      SDL_GL_SwapBuffers();
+
+      /* ****** */    
+
+      SDL_Event e;
+      while(SDL_PollEvent(&e)) {
+        if(e.type == SDL_QUIT) {
+          loop = 0;
           break;
-          
-        default:
-          break;
+        }
+        
+        switch(e.type) {          
+          case SDL_VIDEORESIZE:
+            WINDOW_WIDTH = e.resize.w;
+            WINDOW_HEIGHT = e.resize.h;
+            setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
+            break;
+
+          case SDL_KEYDOWN:
+            if (e.key.keysym.sym == 'q' || e.key.keysym.sym == SDLK_ESCAPE) {
+              loop = 0;
+            }
+            if (e.key.keysym.sym == SDLK_DOWN) {
+              if(statut == 2)
+                statut = 1;
+              else
+                statut = 2;
+            }
+            if (e.key.keysym.sym == SDLK_UP) {
+                if(statut == 1)
+                statut = 2;
+              else
+                statut = 1;
+            }
+            if (e.key.keysym.sym == SDLK_KP_ENTER || e.key.keysym.sym == SDLK_RETURN) {
+              printf("Touche entrée !\n");
+              affichage = statut;
+            }
+            break;
+
+            
+          default:
+            break;
+        }
       }
+    }
+    else if(affichage == 1) { // JEU 1 JOUEUR
+
+    }
+    else if(affichage == 2) { // JEU 2 JOUEURS
+        /* Déplacement de la barre 1 */
+      if (barre_1_keyPressed_left) {
+        if (myBar1.position.x > -0.75) {
+          Point newPosition = PointPlusVector(myBar1.position, vector_to_left);
+          myBar1.position = newPosition;
+        }
+      }
+      if (barre_1_keyPressed_right) {
+        if (myBar1.position.x < 0.75) {
+          Point newPosition = PointPlusVector(myBar1.position, vector_to_right);
+          myBar1.position = newPosition;
+        }
+      }
+
+      /* Déplacement de la barre 2 */
+      if (barre_2_keyPressed_left) {
+        if (myBar2.position.x > -0.75) {
+          Point newPosition = PointPlusVector(myBar2.position, vector_to_left);
+          myBar2.position = newPosition;
+        }
+      }
+      if (barre_2_keyPressed_right) {
+        if (myBar2.position.x < 0.75) {
+          Point newPosition = PointPlusVector(myBar2.position, vector_to_right);
+          myBar2.position = newPosition;
+        }
+      }
+
+      /* Dessin */
+      
+      glClearColor(0.25, 0.24, 0.30, 1);
+      glClear(GL_COLOR_BUFFER_BIT);
+
+      // Reperes
+      //drawReperes();
+
+      /* Affichage de la balle */
+
+      drawBall(myBall1);
+      drawBall(myBall2);
+      drawBall(myBall3);
+
+      /* Affichage des barres de déplacement */
+      drawBar(myBar1);
+      drawBar(myBar2);
+
+      /* Affichage des briques */
+      for (count = 0; count < nb_brick_total; count++) {
+        draw_brick(tab_bricks[count]);
+      }
+
+      /* Affichage des points de vie */
+      if(joueur1.life != 0 && joueur2.life != 0)
+        draw_coeur(texture_coeur, joueur1.life, joueur2.life);
+      else {
+        myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+        myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+       if(joueur1.life == 0) {
+          joueur1.life = 3;
+          joueur2.score++;
+        }
+        if(joueur2.life == 0) {
+          joueur2.life = 3;
+          joueur1.score++;
+        }
+      }
+
+      /* Collision avec les bords de la fenêtre */
+      if(myBall1.position.x+myBall1.radius >= 1 || myBall1.position.x-myBall1.radius <= -1) {
+          myBall1.vector.x *= -1;
+      }
+      if(myBall1.position.y+myBall1.radius >= 1) {
+        joueur2.life--;
+        myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+      }
+      if(myBall1.position.y-myBall1.radius <= -1) {
+        joueur1.life--;
+        myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+      }
+
+      if(myBall2.position.x+myBall2.radius >= 1 || myBall2.position.x-myBall2.radius <= -1) {
+          myBall2.vector.x *= -1;
+      }
+      if(myBall2.position.y+myBall2.radius >= 1) {
+        joueur2.life--;
+        myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+      }
+      if(myBall2.position.y-myBall2.radius <= -1) {
+        joueur1.life--;
+        myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+      }
+
+      if (myBall3.state == 1) {
+        // Balle 3
+        if(myBall3.position.x+myBall3.radius >= 1 || myBall3.position.x-myBall3.radius <= -1) {
+            myBall3.vector.x *= -1;
+        }
+      }
+
+      /*
+      collisionWithWindow(&myBall1, &joueur1, &joueur2, 1);
+      collisionWithWindow(&myBall2, &joueur1, &joueur2, 2);
+      collisionWithWindow(&myBall3, &joueur1, &joueur2, 3);
+      */
+
+      collisionWithBar(&myBall1, myBar1, 1);
+      collisionWithBar(&myBall1, myBar2, 0);
+      collisionWithBar(&myBall2, myBar1, 1);
+      collisionWithBar(&myBall2, myBar2, 0);
+      collisionWithBar(&myBall3, myBar1, 1);
+      collisionWithBar(&myBall3, myBar2, 0);
+
+      for (bricksIterator = 0; bricksIterator < nb_brick_total; bricksIterator++) {
+        collisionWithBrick(&myBall1, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
+        collisionWithBrick(&myBall2, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
+        collisionWithBrick(&myBall3, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
+      }
+
+      myBall1.position = PointPlusVector(myBall1.position, myBall1.vector);
+      myBall2.position = PointPlusVector(myBall2.position, myBall2.vector);
+
+      SDL_GL_SwapBuffers();
+
+      /* ****** */    
+
+      SDL_Event e;
+      while(SDL_PollEvent(&e)) {
+        if(e.type == SDL_QUIT) {
+          loop = 0;
+          break;
+        }
+        
+        switch(e.type) {          
+          case SDL_VIDEORESIZE:
+            WINDOW_WIDTH = e.resize.w;
+            WINDOW_HEIGHT = e.resize.h;
+            setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
+            break;
+
+          case SDL_KEYDOWN:
+            if (e.key.keysym.sym == 'q' || e.key.keysym.sym == SDLK_ESCAPE) {
+              loop = 0;
+            }
+            if (e.key.keysym.sym == SDLK_LEFT) {
+                barre_1_keyPressed_left = e.key.state;
+            }
+            if (e.key.keysym.sym == SDLK_RIGHT) {
+                barre_1_keyPressed_right = e.key.state;
+            }
+            if (e.key.keysym.sym == SDLK_a) {
+                barre_2_keyPressed_left = e.key.state;
+            }
+            if (e.key.keysym.sym == SDLK_z) {
+                barre_2_keyPressed_right = e.key.state;
+            }
+            break;
+
+          case SDL_KEYUP:          
+            barre_1_keyPressed_left = e.key.state;
+            barre_1_keyPressed_right = e.key.state;
+            barre_2_keyPressed_left = e.key.state;
+            barre_2_keyPressed_right = e.key.state;
+            break;
+            
+          default:
+            break;
+        }
+      }
+    }
+    else if(affichage == 3) { // RESULTATS
+
     }
     
     Uint32 elapsedTime = SDL_GetTicks() - startTime;
