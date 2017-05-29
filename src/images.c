@@ -101,7 +101,7 @@ void draw_brick(Brick brick) {
 	}
 }
 
-void draw_menuprincipal(int statut, GLuint texture_arkanopong, GLuint texture_1player, GLuint texture_1playerhover, GLuint texture_2player, GLuint texture_2playerhover) {
+void draw_menuprincipal(int statut, GLuint texture_arkanopong, GLuint texture_1player, GLuint texture_1playerhover, GLuint texture_2player, GLuint texture_2playerhover, GLuint texture_dev, GLuint texture_infos) {
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 
     // ARKANOPONG
@@ -119,6 +119,46 @@ void draw_menuprincipal(int statut, GLuint texture_arkanopong, GLuint texture_1p
       glVertex2f(0.5, -0.1);
       glTexCoord2f(0, 1);
       glVertex2f(-0.5, -0.1);
+    glEnd();
+	glPopMatrix();
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+
+	// INFOS
+	glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture_infos);
+	glPushMatrix();
+	glTranslatef(0, 0.3, 0);
+    glBegin(GL_QUADS);
+      glTexCoord2f(0, 0);
+      glVertex2f(-0.3, 0.05);
+      glTexCoord2f(1, 0);
+      glVertex2f(0.3, 0.05);
+      glTexCoord2f(1, 1);
+      glVertex2f(0.3, -0.05);
+      glTexCoord2f(0, 1);
+      glVertex2f(-0.3, -0.05);
+    glEnd();
+	glPopMatrix();
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+
+	// DEVELOPPE PAR
+	glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture_dev);
+	glPushMatrix();
+	glTranslatef(0, -0.8, 0);
+    glBegin(GL_QUADS);
+      glTexCoord2f(0, 0);
+      glVertex2f(-0.45, 0.03);
+      glTexCoord2f(1, 0);
+      glVertex2f(0.45, 0.03);
+      glTexCoord2f(1, 1);
+      glVertex2f(0.45, -0.03);
+      glTexCoord2f(0, 1);
+      glVertex2f(-0.45, -0.03);
     glEnd();
 	glPopMatrix();
 

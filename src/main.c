@@ -54,8 +54,8 @@ int main(int argc, char** argv) {
   //************************************
 
   // Création des joueurs
-  Player joueur1 = createPlayer("j1", 0, 3, ColorXY(0, 255, 0));
-  Player joueur2 = createPlayer("j2", 0, 3, ColorXY(0, 0, 255));
+  Player joueur1 = createPlayer("j1", 0, 3, ColorXY(249, 220, 92));
+  Player joueur2 = createPlayer("j2", 0, 3, ColorXY(232, 72, 85));
 
   //************************************
 
@@ -67,8 +67,8 @@ int main(int argc, char** argv) {
   Point initPoint_2 = PointXY(0, -0.75);
   float radius = 0.025;
 
-  Ball myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
-  Ball myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+  Ball myBall1 = createBall(radius, 1, 1, ColorXY(232, 72, 85), initPoint_1, initDirection_1);
+  Ball myBall2 = createBall(radius, 1, 1, ColorXY(249, 220, 92), initPoint_2, initDirection_2);
   Ball myBall3 = createBall(radius, 1, 0, ColorXY(115, 0, 80), PointXY(0, 0), VectorXY(PointXY(0, 0), PointXY(0, 0))); 
 
   // IMAGE COEUR
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
   GLuint texture_coeur;
   SDL_Surface *image_coeur = IMG_Load("images/coeur.png");
   if(image_coeur == NULL)
-    printf("Erreur, l'image n'a pas pu être chargée\n");
+    printf("Erreur, l'image coeur.jpg n'a pas pu être chargée\n");
   glGenTextures(1, &texture_coeur);
   glBindTexture(GL_TEXTURE_2D, texture_coeur);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
   GLuint texture_arkanopong;
   SDL_Surface *image_arkanopong = IMG_Load("images/arkanopong.jpg");
   if(image_arkanopong == NULL)
-    printf("Erreur, l'image n'a pas pu être chargée\n");
+    printf("Erreur, l'image arkanopong.jpg n'a pas pu être chargée\n");
   glGenTextures(1, &texture_arkanopong);
   glBindTexture(GL_TEXTURE_2D, texture_arkanopong);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
   GLuint texture_1player;
   SDL_Surface *image_1player = IMG_Load("images/1-joueur.jpg");
   if(image_1player == NULL)
-    printf("Erreur, l'image n'a pas pu être chargée\n");
+    printf("Erreur, l'image 1-joueur.jpg n'a pas pu être chargée\n");
   glGenTextures(1, &texture_1player);
   glBindTexture(GL_TEXTURE_2D, texture_1player);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -152,7 +152,7 @@ int main(int argc, char** argv) {
   GLuint texture_1playerhover;
   SDL_Surface *image_1playerhover = IMG_Load("images/1-joueur-hover.jpg");
   if(image_1playerhover == NULL)
-    printf("Erreur, l'image n'a pas pu être chargée\n");
+    printf("Erreur, l'image 1-joueur-hover.jpg n'a pas pu être chargée\n");
   glGenTextures(1, &texture_1playerhover);
   glBindTexture(GL_TEXTURE_2D, texture_1playerhover);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -177,7 +177,7 @@ int main(int argc, char** argv) {
   GLuint texture_2player;
   SDL_Surface *image_2player = IMG_Load("images/2-joueurs.jpg");
   if(image_2player == NULL)
-    printf("Erreur, l'image n'a pas pu être chargée\n");
+    printf("Erreur, l'image 2-joueurs.jpg n'a pas pu être chargée\n");
   glGenTextures(1, &texture_2player);
   glBindTexture(GL_TEXTURE_2D, texture_2player);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -202,7 +202,7 @@ int main(int argc, char** argv) {
   GLuint texture_2playerhover;
   SDL_Surface *image_2playerhover = IMG_Load("images/2-joueurs-hover.jpg");
   if(image_2playerhover == NULL)
-    printf("Erreur, l'image n'a pas pu être chargée\n");
+    printf("Erreur, l'image 2-joueurs-hover.jpg n'a pas pu être chargée\n");
   glGenTextures(1, &texture_2playerhover);
   glBindTexture(GL_TEXTURE_2D, texture_2playerhover);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -221,6 +221,58 @@ int main(int argc, char** argv) {
       return EXIT_FAILURE;
   }
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_2playerhover->w, image_2playerhover->h, 0, format, GL_UNSIGNED_BYTE, image_2playerhover->pixels);
+
+// IMAGE BOUTON INFOS
+
+  GLuint texture_infos;
+  SDL_Surface *image_infos = IMG_Load("images/infos.jpg");
+  if(image_infos == NULL)
+    printf("Erreur, l'image infos.jpg n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_infos);
+  glBindTexture(GL_TEXTURE_2D, texture_infos);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_infos);
+  switch(image_infos->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_infos->w, image_infos->h, 0, format, GL_UNSIGNED_BYTE, image_infos->pixels);
+
+
+// IMAGE BOUTON DEVELOPPE PAR
+
+  GLuint texture_dev;
+  SDL_Surface *image_dev = IMG_Load("images/dev.jpg");
+  if(image_dev == NULL)
+    printf("Erreur, l'image dev.jpg n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_dev);
+  glBindTexture(GL_TEXTURE_2D, texture_dev);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_dev);
+  switch(image_dev->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_dev->w, image_dev->h, 0, format, GL_UNSIGNED_BYTE, image_dev->pixels);
+
 
   //************************************
 
@@ -502,7 +554,7 @@ int main(int argc, char** argv) {
       glClearColor(0.25, 0.24, 0.30, 1);
       glClear(GL_COLOR_BUFFER_BIT);
 
-      draw_menuprincipal(statut, texture_arkanopong, texture_1player, texture_1playerhover, texture_2player, texture_2playerhover);
+      draw_menuprincipal(statut, texture_arkanopong, texture_1player, texture_1playerhover, texture_2player, texture_2playerhover, texture_dev, texture_infos);
 
       SDL_GL_SwapBuffers();
 
@@ -626,11 +678,11 @@ int main(int argc, char** argv) {
       }
       if(myBall1.position.y+myBall1.radius >= 1) {
         joueur2.life--;
-        myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+        myBall1 = createBall(radius, 1, 1, joueur2.color, initPoint_1, initDirection_1);
       }
       if(myBall1.position.y-myBall1.radius <= -1) {
         joueur1.life--;
-        myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+        myBall1 = createBall(radius, 1, 1, joueur2.color, initPoint_1, initDirection_1);
       }
 
       if(myBall2.position.x+myBall2.radius >= 1 || myBall2.position.x-myBall2.radius <= -1) {
@@ -638,11 +690,11 @@ int main(int argc, char** argv) {
       }
       if(myBall2.position.y+myBall2.radius >= 1) {
         joueur2.life--;
-        myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+        myBall2 = createBall(radius, 1, 1, joueur1.color, initPoint_2, initDirection_2);
       }
       if(myBall2.position.y-myBall2.radius <= -1) {
         joueur1.life--;
-        myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+        myBall2 = createBall(radius, 1, 1, joueur1.color, initPoint_2, initDirection_2);
       }
 
       if (myBall3.state == 1) {
