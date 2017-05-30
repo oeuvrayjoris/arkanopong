@@ -213,3 +213,76 @@ void draw_menuprincipal(int statut, GLuint texture_arkanopong, GLuint texture_1p
 
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
+
+void draw_results(int statut, GLuint texture_jwon, GLuint texture_menu, GLuint texture_menuhover, GLuint texture_rejouer, GLuint texture_rejouerhover) {
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+
+    // JWON
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture_jwon);
+
+	glPushMatrix();
+	glTranslatef(0, 0.5, 0);
+    glBegin(GL_QUADS);
+      glTexCoord2f(0, 0);
+      glVertex2f(-0.5, 0.2);
+      glTexCoord2f(1, 0);
+      glVertex2f(0.5, 0.2);
+      glTexCoord2f(1, 1);
+      glVertex2f(0.5, -0.2);
+      glTexCoord2f(0, 1);
+      glVertex2f(-0.5, -0.2);
+    glEnd();
+	glPopMatrix();
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+
+	// REJOUER
+	glEnable(GL_TEXTURE_2D);
+    if(statut == -1 || statut == 0)
+    	glBindTexture(GL_TEXTURE_2D, texture_rejouer);
+    else if(statut == 1 || statut == 2)
+    	glBindTexture(GL_TEXTURE_2D, texture_rejouerhover);
+	glPushMatrix();
+    glBegin(GL_QUADS);
+      glTexCoord2f(0, 0);
+      glVertex2f(-0.3, 0.05);
+      glTexCoord2f(1, 0);
+      glVertex2f(0.3, 0.05);
+      glTexCoord2f(1, 1);
+      glVertex2f(0.3, -0.05);
+      glTexCoord2f(0, 1);
+      glVertex2f(-0.3, -0.05);
+    glEnd();
+	glPopMatrix();
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+
+	// MENU
+	glEnable(GL_TEXTURE_2D);
+	if(statut == -1 || statut == 1 || statut == 2)
+    	glBindTexture(GL_TEXTURE_2D, texture_menu);
+    else if(statut == 0)
+    	glBindTexture(GL_TEXTURE_2D, texture_menuhover);
+
+	glPushMatrix();
+	glTranslatef(0, -0.2, 0);
+    glBegin(GL_QUADS);
+      glTexCoord2f(0, 0);
+      glVertex2f(-0.3, 0.05);
+      glTexCoord2f(1, 0);
+      glVertex2f(0.3, 0.05);
+      glTexCoord2f(1, 1);
+      glVertex2f(0.3, -0.05);
+      glTexCoord2f(0, 1);
+      glVertex2f(-0.3, -0.05);
+    glEnd();
+	glPopMatrix();
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+}

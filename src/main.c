@@ -274,6 +274,159 @@ int main(int argc, char** argv) {
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_dev->w, image_dev->h, 0, format, GL_UNSIGNED_BYTE, image_dev->pixels);
 
 
+// IMAGE J1 WON
+
+  GLuint texture_j1won;
+  SDL_Surface *image_j1won = IMG_Load("images/j1won.jpg");
+  if(image_j1won == NULL)
+    printf("Erreur, l'image j1won.jpg n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_j1won);
+  glBindTexture(GL_TEXTURE_2D, texture_j1won);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_j1won);
+  switch(image_j1won->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_j1won->w, image_j1won->h, 0, format, GL_UNSIGNED_BYTE, image_j1won->pixels);
+
+// IMAGE J2 WON
+
+  GLuint texture_j2won;
+  SDL_Surface *image_j2won = IMG_Load("images/j2won.jpg");
+  if(image_j2won == NULL)
+    printf("Erreur, l'image j2won.jpg n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_j2won);
+  glBindTexture(GL_TEXTURE_2D, texture_j2won);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_j2won);
+  switch(image_j2won->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_j2won->w, image_j2won->h, 0, format, GL_UNSIGNED_BYTE, image_j2won->pixels);
+
+// IMAGE BOUTON MENU
+
+  GLuint texture_menu;
+  SDL_Surface *image_menu = IMG_Load("images/menu.jpg");
+  if(image_menu == NULL)
+    printf("Erreur, l'image menu.jpg n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_menu);
+  glBindTexture(GL_TEXTURE_2D, texture_menu);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_menu);
+  switch(image_menu->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_menu->w, image_menu->h, 0, format, GL_UNSIGNED_BYTE, image_menu->pixels);
+
+// IMAGE BOUTON MENU HOVER
+
+  GLuint texture_menuhover;
+  SDL_Surface *image_menuhover = IMG_Load("images/menu-hover.jpg");
+  if(image_menuhover == NULL)
+    printf("Erreur, l'image menu-hover.jpg n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_menuhover);
+  glBindTexture(GL_TEXTURE_2D, texture_menuhover);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_menuhover);
+  switch(image_menuhover->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_menuhover->w, image_menuhover->h, 0, format, GL_UNSIGNED_BYTE, image_menuhover->pixels);
+
+
+// IMAGE BOUTON REJOUER
+
+  GLuint texture_rejouer;
+  SDL_Surface *image_rejouer = IMG_Load("images/rejouer.jpg");
+  if(image_rejouer == NULL)
+    printf("Erreur, l'image menu-hover.jpg n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_rejouer);
+  glBindTexture(GL_TEXTURE_2D, texture_rejouer);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_rejouer);
+  switch(image_rejouer->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_rejouer->w, image_rejouer->h, 0, format, GL_UNSIGNED_BYTE, image_rejouer->pixels);
+
+
+// IMAGE BOUTON REJOUER HOVER
+
+  GLuint texture_rejouerhover;
+  SDL_Surface *image_rejouerhover = IMG_Load("images/rejouer-hover.jpg");
+  if(image_rejouerhover == NULL)
+    printf("Erreur, l'image rejouer-hover.jpg n'a pas pu être chargée\n");
+  glGenTextures(1, &texture_rejouerhover);
+  glBindTexture(GL_TEXTURE_2D, texture_rejouerhover);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(0, texture_rejouerhover);
+  switch(image_rejouerhover->format->BytesPerPixel) {
+    case 1:
+      format = GL_RED;
+      break;
+    case 3:
+      format = GL_RGB;
+      break;
+    case 4:
+      format = GL_RGBA;
+      break;
+    default:
+      return EXIT_FAILURE;
+  }
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_rejouerhover->w, image_rejouerhover->h, 0, format, GL_UNSIGNED_BYTE, image_rejouerhover->pixels);
+
+
   //************************************
 
   // Variables pour les barres de jeu
@@ -545,6 +698,7 @@ int main(int argc, char** argv) {
 
   //************************************
   int statut = 1;
+  int mode = 0;
   int loop = 1;
   while(loop) {
     Uint32 startTime = SDL_GetTicks();
@@ -660,16 +814,8 @@ int main(int argc, char** argv) {
       if(joueur1.life != 0 && joueur2.life != 0)
         draw_coeur(texture_coeur, joueur1.life, joueur2.life);
       else {
-        myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
-        myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
-       if(joueur1.life == 0) {
-          joueur1.life = 3;
-          joueur2.score++;
-        }
-        if(joueur2.life == 0) {
-          joueur2.life = 3;
-          joueur1.score++;
-        }
+        affichage = 3;
+        mode = statut;
       }
 
       /* Collision avec les bords de la fenêtre */
@@ -775,7 +921,69 @@ int main(int argc, char** argv) {
       }
     }
     else if(affichage == 3) { // RESULTATS
+      glClearColor(0.25, 0.24, 0.30, 1);
+      glClear(GL_COLOR_BUFFER_BIT);
 
+      if(joueur1.life == 0)
+        draw_results(statut, texture_j2won, texture_menu, texture_menuhover, texture_rejouer, texture_rejouerhover);
+      if(joueur2.life == 0)
+        draw_results(statut, texture_j1won, texture_menu, texture_menuhover, texture_rejouer, texture_rejouerhover);
+
+      SDL_GL_SwapBuffers();
+
+      /* ****** */    
+
+      SDL_Event e;
+      while(SDL_PollEvent(&e)) {
+        if(e.type == SDL_QUIT) {
+          loop = 0;
+          break;
+        }
+        
+        switch(e.type) {          
+          case SDL_VIDEORESIZE:
+            WINDOW_WIDTH = e.resize.w;
+            WINDOW_HEIGHT = e.resize.h;
+            setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
+            break;
+
+          case SDL_KEYDOWN:
+            if (e.key.keysym.sym == 'q' || e.key.keysym.sym == SDLK_ESCAPE) {
+              loop = 0;
+            }
+            if (e.key.keysym.sym == SDLK_DOWN) {
+              if(statut == 0)
+                statut = mode;
+              else
+                statut = 0;
+            }
+            if (e.key.keysym.sym == SDLK_UP) {
+              if(statut == mode)
+                statut = 0;
+              else
+                statut = mode;
+            }
+            if (e.key.keysym.sym == SDLK_KP_ENTER || e.key.keysym.sym == SDLK_RETURN) {
+              joueur1.life = 3;
+              joueur2.life = 3;
+              myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
+              myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+              for (count = 0; count < nb_brick_total; count++) {
+                tab_bricks[count].state = 1;
+              }
+              myBar1 = createBar(0.4, 0.05, 1, joueur1.color, PointXY(0, -0.9));
+              myBar2 = createBar(0.4, 0.05, 1, joueur2.color, PointXY(0, 0.9));
+              affichage = statut;
+              if(affichage == 0)
+                statut = 1;
+            }
+            break;
+
+            
+          default:
+            break;
+        }
+      }
     }
     
     Uint32 elapsedTime = SDL_GetTicks() - startTime;
