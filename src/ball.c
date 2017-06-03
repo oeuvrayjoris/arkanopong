@@ -176,8 +176,6 @@ int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2, Player *j
 				}
 			}
 
-			//printf("%.3f\n", (ball->position.x+ball->radius) - (brick->position.x));
-
 			// Left
 			if ((ball->position.x+ball->radius) - (brick->position.x) >= -0.01 && (ball->position.x-ball->radius) - (brick->position.x) <= 0.01) {
 				/* Balle en haut */
@@ -247,11 +245,14 @@ int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2, Player *j
 						brick->state = 0;
 						break;
 					case 5: // Bonus 4 : ajout d'une 3e balle
-						if(ball->vector.y < 0) { // joueur1
-							*ballSup = createBall(0.025, 1, 1, ColorXY(255, 0, 0), PointXY(0, 0.75), VectorXY(PointXY(0, 0), PointXY(0, -0.005)));
+						ballSup->state = 1;
+						if(ball->vector.y > 0) { // joueur1
+							ballSup->vector = VectorXY(PointXY(0, 0), PointXY(0, -0.005));
+							ballSup->position = PointXY(0, 0.75);
 						}
 						else {
-							*ballSup = createBall(0.025, 1, 1, ColorXY(255, 0, 255), PointXY(0, -0.75), VectorXY(PointXY(0, 0), PointXY(0, 0.005)));
+							ballSup->vector = VectorXY(PointXY(0, 0), PointXY(0, 0.005));
+							ballSup->position = PointXY(0, -0.75);
 						}
 						brick->state = 0;
 						break;

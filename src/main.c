@@ -61,9 +61,9 @@ int main(int argc, char** argv) {
 
   // Création des balles
 
-  Vector initDirection_1 = VectorXY(PointXY(0, 0), PointXY(0, -0.005));
+  Vector initDirection_1 = VectorXY(PointXY(0, 0), PointXY(0, 0.0025));
   Point initPoint_1 = PointXY(0, 0.75);
-  Vector initDirection_2 = VectorXY(PointXY(0, 0), PointXY(0, 0.005));
+  Vector initDirection_2 = VectorXY(PointXY(0, 0), PointXY(0, -0.0025));
   Point initPoint_2 = PointXY(0, -0.75);
   float radius = 0.025;
 
@@ -759,15 +759,16 @@ int main(int argc, char** argv) {
 
     }
     else if(affichage == 2) { // JEU 2 JOUEURS
+
         /* Déplacement de la barre 1 */
       if (barre_1_keyPressed_left) {
-        if (myBar1.position.x > -0.75) {
+        if (myBar1.position.x > -1+myBar1.longueur * 2) {
           Point newPosition = PointPlusVector(myBar1.position, vector_to_left);
           myBar1.position = newPosition;
         }
       }
       if (barre_1_keyPressed_right) {
-        if (myBar1.position.x < 0.75) {
+        if (myBar1.position.x < 1-myBar1.longueur * 2) {
           Point newPosition = PointPlusVector(myBar1.position, vector_to_right);
           myBar1.position = newPosition;
         }
@@ -775,13 +776,13 @@ int main(int argc, char** argv) {
 
       /* Déplacement de la barre 2 */
       if (barre_2_keyPressed_left) {
-        if (myBar2.position.x > -0.75) {
+        if (myBar2.position.x > -1-myBar2.longueur * 2) {
           Point newPosition = PointPlusVector(myBar2.position, vector_to_left);
           myBar2.position = newPosition;
         }
       }
       if (barre_2_keyPressed_right) {
-        if (myBar2.position.x < 0.75) {
+        if (myBar2.position.x < 1-myBar2.longueur * 2) {
           Point newPosition = PointPlusVector(myBar2.position, vector_to_right);
           myBar2.position = newPosition;
         }
@@ -847,6 +848,7 @@ int main(int argc, char** argv) {
         // Balle 3
         if(myBall3.position.x+myBall3.radius >= 1 || myBall3.position.x-myBall3.radius <= -1) {
             myBall3.vector.x *= -1;
+            myBall3.state = 0; // Desactivation de la balle 3
         }
       }
 
@@ -871,6 +873,7 @@ int main(int argc, char** argv) {
 
       myBall1.position = PointPlusVector(myBall1.position, myBall1.vector);
       myBall2.position = PointPlusVector(myBall2.position, myBall2.vector);
+      myBall3.position = PointPlusVector(myBall3.position, myBall3.vector);
 
       SDL_GL_SwapBuffers();
 
@@ -971,8 +974,8 @@ int main(int argc, char** argv) {
               for (count = 0; count < nb_brick_total; count++) {
                 tab_bricks[count].state = 1;
               }
-              myBar1 = createBar(0.4, 0.05, 1, joueur1.color, PointXY(0, -0.9));
-              myBar2 = createBar(0.4, 0.05, 1, joueur2.color, PointXY(0, 0.9));
+              myBar1 = createBar(myBar1.longueur, myBar1.largeur, 1, joueur1.color, PointXY(0, -0.9));
+              myBar2 = createBar(myBar2.longueur, myBar2.largeur, 1, joueur2.color, PointXY(0, 0.9));
               affichage = statut;
               if(affichage == 0)
                 statut = 1;
