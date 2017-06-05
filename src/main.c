@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
   // IMAGE COEUR
 
   GLuint texture_coeur;
-  SDL_Surface *image_coeur = IMG_Load("images/coeur.png");
+  SDL_Surface *image_coeur = IMG_Load("images/coeur.jpg");
   if(image_coeur == NULL)
     printf("Erreur, l'image coeur.jpg n'a pas pu être chargée\n");
   glGenTextures(1, &texture_coeur);
@@ -756,6 +756,169 @@ int main(int argc, char** argv) {
       }
     }
     else if(affichage == 1) { // JEU 1 JOUEUR
+
+        /* Déplacement de la barre 1 */
+      if (barre_1_keyPressed_left) {
+        if (myBar1.position.x > -1+myBar1.longueur * 2) {
+          Point newPosition = PointPlusVector(myBar1.position, vector_to_left);
+          myBar1.position = newPosition;
+        }
+      }
+      if (barre_1_keyPressed_right) {
+        if (myBar1.position.x < 1-myBar1.longueur * 2) {
+          Point newPosition = PointPlusVector(myBar1.position, vector_to_right);
+          myBar1.position = newPosition;
+        }
+      }
+
+      /* Déplacement de la barre 2 */
+      if (barre_2_keyPressed_left) {
+        if (myBar2.position.x > -1-myBar2.longueur * 2) {
+          Point newPosition = PointPlusVector(myBar2.position, vector_to_left);
+          myBar2.position = newPosition;
+        }
+      }
+      if (barre_2_keyPressed_right) {
+        if (myBar2.position.x < 1-myBar2.longueur * 2) {
+          Point newPosition = PointPlusVector(myBar2.position, vector_to_right);
+          myBar2.position = newPosition;
+        }
+      }
+
+      /* Dessin */
+      
+      glClearColor(0.25, 0.24, 0.30, 1);
+      glClear(GL_COLOR_BUFFER_BIT);
+
+      // Reperes
+      //drawReperes();
+
+      /* Affichage de la balle */
+
+      drawBall(myBall1);
+      drawBall(myBall2);
+      drawBall(myBall3);
+
+      /* Affichage des barres de déplacement */
+      drawBar(myBar1);
+      drawBar(myBar2);
+
+      /* Affichage des briques */
+      for (count = 0; count < nb_brick_total; count++) {
+        draw_brick(tab_bricks[count]);
+      }
+
+      /* Affichage des points de vie */
+      if(joueur1.life != 0 && joueur2.life != 0)
+        draw_coeur(texture_coeur, joueur1.life, joueur2.life);
+      else {
+        affichage = 3;
+        mode = statut;
+      }
+
+      /* Collision avec les bords de la fenêtre */
+      if(myBall1.position.x+myBall1.radius >= 1 || myBall1.position.x-myBall1.radius <= -1) {
+          myBall1.vector.x *= -1;
+      }
+      if(myBall1.position.y+myBall1.radius >= 1) {
+        joueur2.life--;
+        myBall1 = createBall(radius, 1, 1, joueur2.color, initPoint_1, initDirection_1);
+      }
+      if(myBall1.position.y-myBall1.radius <= -1) {
+        joueur1.life--;
+        myBall1 = createBall(radius, 1, 1, joueur2.color, initPoint_1, initDirection_1);
+      }
+
+      if(myBall2.position.x+myBall2.radius >= 1 || myBall2.position.x-myBall2.radius <= -1) {
+          myBall2.vector.x *= -1;
+      }
+      if(myBall2.position.y+myBall2.radius >= 1) {
+        joueur2.life--;
+        myBall2 = createBall(radius, 1, 1, joueur1.color, initPoint_2, initDirection_2);
+      }
+      if(myBall2.position.y-myBall2.radius <= -1) {
+        joueur1.life--;
+        myBall2 = createBall(radius, 1, 1, joueur1.color, initPoint_2, initDirection_2);
+      }
+
+      if (myBall3.state == 1) {
+        // Balle 3
+        if(myBall3.position.x+myBall3.radius >= 1 || myBall3.position.x-myBall3.radius <= -1) {
+            myBall3.vector.x *= -1;
+            myBall3.state = 0; // Desactivation de la balle 3
+        }
+      }
+
+      /*
+      collisionWithWindow(&myBall1, &joueur1, &joueur2, 1);
+      collisionWithWindow(&myBall2, &joueur1, &joueur2, 2);
+      collisionWithWindow(&myBall3, &joueur1, &joueur2, 3);
+      */
+
+      collisionWithBar(&myBall1, myBar1, 1);
+      collisionWithBar(&myBall1, myBar2, 0);
+      collisionWithBar(&myBall2, myBar1, 1);
+      collisionWithBar(&myBall2, myBar2, 0);
+      collisionWithBar(&myBall3, myBar1, 1);
+      collisionWithBar(&myBall3, myBar2, 0);
+
+      for (bricksIterator = 0; bricksIterator < nb_brick_total; bricksIterator++) {
+        collisionWithBrick(&myBall1, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
+        collisionWithBrick(&myBall2, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
+        collisionWithBrick(&myBall3, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
+      }
+
+      myBall1.position = PointPlusVector(myBall1.position, myBall1.vector);
+      myBall2.position = PointPlusVector(myBall2.position, myBall2.vector);
+      myBall3.position = PointPlusVector(myBall3.position, myBall3.vector);
+
+      SDL_GL_SwapBuffers();
+
+      /* ****** */    
+
+      SDL_Event e;
+      while(SDL_PollEvent(&e)) {
+        if(e.type == SDL_QUIT) {
+          loop = 0;
+          break;
+        }
+        
+        switch(e.type) {          
+          case SDL_VIDEORESIZE:
+            WINDOW_WIDTH = e.resize.w;
+            WINDOW_HEIGHT = e.resize.h;
+            setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
+            break;
+
+          case SDL_KEYDOWN:
+            if (e.key.keysym.sym == 'q' || e.key.keysym.sym == SDLK_ESCAPE) {
+              loop = 0;
+            }
+            if (e.key.keysym.sym == SDLK_LEFT) {
+                barre_1_keyPressed_left = e.key.state;
+            }
+            if (e.key.keysym.sym == SDLK_RIGHT) {
+                barre_1_keyPressed_right = e.key.state;
+            }
+            if (e.key.keysym.sym == SDLK_a) {
+                barre_2_keyPressed_left = e.key.state;
+            }
+            if (e.key.keysym.sym == SDLK_z) {
+                barre_2_keyPressed_right = e.key.state;
+            }
+            break;
+
+          case SDL_KEYUP:          
+            barre_1_keyPressed_left = e.key.state;
+            barre_1_keyPressed_right = e.key.state;
+            barre_2_keyPressed_left = e.key.state;
+            barre_2_keyPressed_right = e.key.state;
+            break;
+            
+          default:
+            break;
+        }
+      }
 
     }
     else if(affichage == 2) { // JEU 2 JOUEURS
