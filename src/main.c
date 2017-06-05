@@ -13,6 +13,7 @@
 #include "geometry.h"
 #include "player.h"
 #include "images.h"
+#include "functions.h"
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
@@ -437,8 +438,10 @@ int main(int argc, char** argv) {
   int barre_2_keyPressed_right = 0;
 
   // BARRES DE JEU
-  Bar myBar1 = createBar(0.4, 0.05, 1, joueur1.color, PointXY(0, -0.9));
-  Bar myBar2 = createBar(0.4, 0.05, 1, joueur2.color, PointXY(0, 0.9));
+  float initBarLargeur = 0.4;
+  float initBarLongueur = 0.05;
+  Bar myBar1 = createBar(initBarLargeur, initBarLongueur, 1, joueur1.color, PointXY(0, -0.9));
+  Bar myBar2 = createBar(initBarLargeur, initBarLongueur, 1, joueur2.color, PointXY(0, 0.9));
 
   // Vecteurs directeurs de déplacements des barres de jeu
   Vector vector_to_left = VectorXY(PointXY(0.025,0), PointXY(0,0));
@@ -495,7 +498,10 @@ int main(int argc, char** argv) {
     index++;
   }
 
-  // Tableau de briques
+  // On mélange les types de briques dans le tableau
+  shuffle(bricksType, nb_brick_total);
+
+  // Construction du tableau de briques
   Brick tab_bricks[nb_brick_total];
 
   float hauteur_brick = 0.1;
@@ -533,6 +539,7 @@ int main(int argc, char** argv) {
     printf("Erreur, l'image bonus_4.jpg n'a pas pu être chargée\n");
   }
 
+  // Affichage des briques
   for (i = 0; i < nb_brick_x; i++) {
     for (j = 0; j < nb_brick_y; j++) {
         switch(bricksType[count]) {
@@ -817,6 +824,7 @@ int main(int argc, char** argv) {
       }
 
       /* Collision avec les bords de la fenêtre */
+      // Balle 1
       if(myBall1.position.x+myBall1.radius >= 1 || myBall1.position.x-myBall1.radius <= -1) {
           myBall1.vector.x *= -1;
       }
@@ -829,6 +837,7 @@ int main(int argc, char** argv) {
         myBall1 = createBall(radius, 1, 1, joueur2.color, initPoint_1, initDirection_1);
       }
 
+      // Balle 2
       if(myBall2.position.x+myBall2.radius >= 1 || myBall2.position.x-myBall2.radius <= -1) {
           myBall2.vector.x *= -1;
       }
@@ -841,12 +850,12 @@ int main(int argc, char** argv) {
         myBall2 = createBall(radius, 1, 1, joueur1.color, initPoint_2, initDirection_2);
       }
 
+      // Balle 3
       if (myBall3.state == 1) {
-        // Balle 3
-        if(myBall3.position.x+myBall3.radius >= 1 || myBall3.position.x-myBall3.radius <= -1) {
+        if(myBall3.position.x+myBall3.radius >= 1 || myBall3.position.x-myBall3.radius <= -1)
             myBall3.vector.x *= -1;
+        if(myBall3.position.y+myBall3.radius >= 1 || myBall3.position.y-myBall3.radius <= -1)
             myBall3.state = 0; // Desactivation de la balle 3
-        }
       }
 
       /*
@@ -855,6 +864,7 @@ int main(int argc, char** argv) {
       collisionWithWindow(&myBall3, &joueur1, &joueur2, 3);
       */
 
+      // Test de collision Balle / Barre
       collisionWithBar(&myBall1, myBar1, 1);
       collisionWithBar(&myBall1, myBar2, 0);
       collisionWithBar(&myBall2, myBar1, 1);
@@ -862,12 +872,14 @@ int main(int argc, char** argv) {
       collisionWithBar(&myBall3, myBar1, 1);
       collisionWithBar(&myBall3, myBar2, 0);
 
+      // Test de collision Balle / Brique
       for (bricksIterator = 0; bricksIterator < nb_brick_total; bricksIterator++) {
         collisionWithBrick(&myBall1, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
         collisionWithBrick(&myBall2, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
         collisionWithBrick(&myBall3, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
       }
 
+      // Modifications des directions des balles
       myBall1.position = PointPlusVector(myBall1.position, myBall1.vector);
       myBall2.position = PointPlusVector(myBall2.position, myBall2.vector);
       myBall3.position = PointPlusVector(myBall3.position, myBall3.vector);
@@ -1003,8 +1015,9 @@ int main(int argc, char** argv) {
         // Balle 3
         if(myBall3.position.x+myBall3.radius >= 1 || myBall3.position.x-myBall3.radius <= -1) {
             myBall3.vector.x *= -1;
-            myBall3.state = 0; // Desactivation de la balle 3
         }
+        if(myBall3.position.y+myBall3.radius >= 1 || myBall3.position.y-myBall3.radius <= -1) {}
+            //myBall3.state = 0; // Desactivation de la balle 3
       }
 
       /*
@@ -1013,6 +1026,7 @@ int main(int argc, char** argv) {
       collisionWithWindow(&myBall3, &joueur1, &joueur2, 3);
       */
 
+      // Test de collision balle / barre
       collisionWithBar(&myBall1, myBar1, 1);
       collisionWithBar(&myBall1, myBar2, 0);
       collisionWithBar(&myBall2, myBar1, 1);
@@ -1020,12 +1034,14 @@ int main(int argc, char** argv) {
       collisionWithBar(&myBall3, myBar1, 1);
       collisionWithBar(&myBall3, myBar2, 0);
 
+      // Test de collision balle / brique
       for (bricksIterator = 0; bricksIterator < nb_brick_total; bricksIterator++) {
         collisionWithBrick(&myBall1, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
         collisionWithBrick(&myBall2, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
         collisionWithBrick(&myBall3, &tab_bricks[bricksIterator], &myBar1, &myBar2, &joueur1, &joueur2, &myBall3);
       }
 
+      // Modification des directions des balles
       myBall1.position = PointPlusVector(myBall1.position, myBall1.vector);
       myBall2.position = PointPlusVector(myBall2.position, myBall2.vector);
       myBall3.position = PointPlusVector(myBall3.position, myBall3.vector);
@@ -1124,13 +1140,13 @@ int main(int argc, char** argv) {
             if (e.key.keysym.sym == SDLK_KP_ENTER || e.key.keysym.sym == SDLK_RETURN) {
               joueur1.life = 3;
               joueur2.life = 3;
-              myBall1 = createBall(radius, 1, 1, ColorXY(255, 0, 0), initPoint_1, initDirection_1);
-              myBall2 = createBall(radius, 1, 1, ColorXY(255, 0, 255), initPoint_2, initDirection_2);
+              myBall1 = createBall(radius, 1, 1, joueur2.color, initPoint_1, initDirection_1);
+              myBall2 = createBall(radius, 1, 1, joueur1.color, initPoint_2, initDirection_2);
               for (count = 0; count < nb_brick_total; count++) {
                 tab_bricks[count].state = 1;
               }
-              myBar1 = createBar(myBar1.longueur, myBar1.largeur, 1, joueur1.color, PointXY(0, -0.9));
-              myBar2 = createBar(myBar2.longueur, myBar2.largeur, 1, joueur2.color, PointXY(0, 0.9));
+              myBar1 = createBar(initBarLargeur, initBarLongueur, 1, joueur1.color, PointXY(0, -0.9));
+              myBar2 = createBar(initBarLargeur, initBarLongueur, 1, joueur2.color, PointXY(0, 0.9));
               affichage = statut;
               if(affichage == 0)
                 statut = 1;

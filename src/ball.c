@@ -181,13 +181,15 @@ int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2, Player *j
 				/* Balle en haut */
 				if (ball->position.y <= brick->position.y && ball->position.y >= brick->position.y - (brick->longueur/2)) {
 					ball->vector.x = -0.01;
-					ball->vector.y *= -1;
+					if (ball->vector.y < 0)
+						ball->vector.y *= -1;
 					collision = 1;
 				}
 				/* Balle en bas */
 				else if (ball->position.y < brick->position.y - (brick->longueur/2) && ball->position.y >= brick->position.y - brick->longueur) {
 					ball->vector.x = -0.01;
-					ball->vector.y *= 1;
+					if (ball->vector.y > 0)
+						ball->vector.y *= -1;
 					collision = 1;
 				}
 			}
@@ -197,13 +199,15 @@ int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2, Player *j
 				/* Balle en haut */
 				if (ball->position.y <= brick->position.y && ball->position.y >= brick->position.y - (brick->longueur/2)) {
 					ball->vector.x = 0.01;
-					ball->vector.y *= -1;
+					if (ball->vector.y < 0)
+						ball->vector.y *= -1;
 					collision = 1;
 				}
 				/* Balle en bas */
 				else if (ball->position.y < brick->position.y - (brick->longueur/2) && ball->position.y >= brick->position.y - brick->longueur) {
 					ball->vector.x = 0.01;
-					ball->vector.y *= 1;
+					if (ball->vector.y > 0)
+						ball->vector.y *= 1;
 					collision = 1;
 				}
 			}
@@ -246,7 +250,7 @@ int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2, Player *j
 						break;
 					case 5: // Bonus 4 : ajout d'une 3e balle
 						ballSup->state = 1;
-						if(ball->vector.y > 0) { // joueur1
+						if(ball->vector.y < 0) { // joueur1
 							ballSup->vector = VectorXY(PointXY(0, 0), PointXY(0, -0.005));
 							ballSup->position = PointXY(0, 0.75);
 						}
