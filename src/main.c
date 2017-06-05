@@ -759,27 +759,27 @@ int main(int argc, char** argv) {
 
         /* Déplacement de la barre 1 */
       if (barre_1_keyPressed_left) {
-        if (myBar1.position.x > -1+myBar1.longueur * 2) {
+        if (myBar1.position.x > -1 + myBar1.largeur/2) {
           Point newPosition = PointPlusVector(myBar1.position, vector_to_left);
           myBar1.position = newPosition;
         }
       }
       if (barre_1_keyPressed_right) {
-        if (myBar1.position.x < 1-myBar1.longueur * 2) {
+        if (myBar1.position.x < 1 - myBar1.largeur/2) {
           Point newPosition = PointPlusVector(myBar1.position, vector_to_right);
           myBar1.position = newPosition;
         }
       }
 
       /* Déplacement de la barre 2 */
-      if (barre_2_keyPressed_left) {
-        if (myBar2.position.x > -1-myBar2.longueur * 2) {
+      if (myBall1.position.x < myBar2.position.x) {
+        if (myBar2.position.x > -1 + myBar2.largeur/2) {
           Point newPosition = PointPlusVector(myBar2.position, vector_to_left);
           myBar2.position = newPosition;
         }
       }
-      if (barre_2_keyPressed_right) {
-        if (myBar2.position.x < 1-myBar2.longueur * 2) {
+      if (myBall1.position.x > myBar2.position.x) {
+        if (myBar2.position.x < 1 - myBar2.largeur/2) {
           Point newPosition = PointPlusVector(myBar2.position, vector_to_right);
           myBar2.position = newPosition;
         }
@@ -900,19 +900,11 @@ int main(int argc, char** argv) {
             if (e.key.keysym.sym == SDLK_RIGHT) {
                 barre_1_keyPressed_right = e.key.state;
             }
-            if (e.key.keysym.sym == SDLK_a) {
-                barre_2_keyPressed_left = e.key.state;
-            }
-            if (e.key.keysym.sym == SDLK_z) {
-                barre_2_keyPressed_right = e.key.state;
-            }
             break;
 
           case SDL_KEYUP:          
             barre_1_keyPressed_left = e.key.state;
             barre_1_keyPressed_right = e.key.state;
-            barre_2_keyPressed_left = e.key.state;
-            barre_2_keyPressed_right = e.key.state;
             break;
             
           default:
@@ -925,13 +917,13 @@ int main(int argc, char** argv) {
 
         /* Déplacement de la barre 1 */
       if (barre_1_keyPressed_left) {
-        if (myBar1.position.x > -1+myBar1.longueur * 2) {
+        if (myBar1.position.x > -1+(myBar1.largeur/2)) {
           Point newPosition = PointPlusVector(myBar1.position, vector_to_left);
           myBar1.position = newPosition;
         }
       }
       if (barre_1_keyPressed_right) {
-        if (myBar1.position.x < 1-myBar1.longueur * 2) {
+        if (myBar1.position.x < 1- (myBar1.largeur/2)) {
           Point newPosition = PointPlusVector(myBar1.position, vector_to_right);
           myBar1.position = newPosition;
         }
@@ -939,13 +931,13 @@ int main(int argc, char** argv) {
 
       /* Déplacement de la barre 2 */
       if (barre_2_keyPressed_left) {
-        if (myBar2.position.x > -1-myBar2.longueur * 2) {
+        if (myBar2.position.x > -1+(myBar2.largeur/2)) {
           Point newPosition = PointPlusVector(myBar2.position, vector_to_left);
           myBar2.position = newPosition;
         }
       }
       if (barre_2_keyPressed_right) {
-        if (myBar2.position.x < 1-myBar2.longueur * 2) {
+        if (myBar2.position.x < 1- (myBar2.largeur/2)) {
           Point newPosition = PointPlusVector(myBar2.position, vector_to_right);
           myBar2.position = newPosition;
         }
