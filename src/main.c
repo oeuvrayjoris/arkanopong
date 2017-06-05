@@ -54,8 +54,8 @@ int main(int argc, char** argv) {
   //************************************
 
   // Création des joueurs
-  Player joueur1 = createPlayer("j1", 0, 3, ColorXY(249, 220, 92));
-  Player joueur2 = createPlayer("j2", 0, 3, ColorXY(232, 72, 85));
+  Player joueur1 = createPlayer(3, ColorXY(249, 220, 92));
+  Player joueur2 = createPlayer(3, ColorXY(232, 72, 85));
 
   //************************************
 

@@ -8,10 +8,8 @@
 #include "geometry.h"
 #include "player.h"
 
-Player createPlayer(char *name, int score, int life, Color3D color) {
+Player createPlayer(int life, Color3D color) {
 	Player myPlayer;
-	myPlayer.name = name;
-	myPlayer.score = score;
 	myPlayer.life = life;
 	myPlayer.color = color;
 	return myPlayer;

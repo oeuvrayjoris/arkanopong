@@ -4,14 +4,12 @@
 #include "player.h"
 
 typedef struct Player {
-	char *name;
-	int score;
 	int life;
 	Color3D color;
 } Player;
 
 
-Player createPlayer(char *name, int score, int life, Color3D color);
+Player createPlayer(int life, Color3D color);
 
 void drawPlayer(Player player);
 
