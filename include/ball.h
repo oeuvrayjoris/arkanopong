@@ -10,6 +10,7 @@ typedef struct Ball {
 	float radius;
 	int full;
 	int state;
+	int lastTouch;
 	Color3D color;
 	Point position;
 	Vector vector;

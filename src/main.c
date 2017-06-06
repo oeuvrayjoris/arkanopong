@@ -1020,11 +1020,11 @@ int main(int argc, char** argv) {
       if (myBall3.state == 1) {
         // Balle 3
         if(myBall3.position.x+myBall3.radius >= 1 || myBall3.position.x-myBall3.radius <= -1) {
-            myBall3.vector.x *= -1;
+          myBall3.vector.x *= -1;
         }
         // Si elle sort
-        if(myBall3.position.y+myBall3.radius >= 1 || myBall3.position.y-myBall3.radius <= -1) {}
-            myBall3.state = 0; // Desactivation de la balle 3
+        if(myBall3.position.y+myBall3.radius >= 1 || myBall3.position.y-myBall3.radius <= -1)
+          myBall3.state = 0; // Desactivation de la balle 3
       }
 
       /*

@@ -16,6 +16,7 @@ Ball createBall(float radius, int full, int state, Color3D color, Point position
 	ball.radius = radius;
 	ball.full = full;
 	ball.state = state;
+	ball.lastTouch = 0;
 	ball.color = color;
 	ball.position = position;
 	ball.vector = vector;
@@ -76,46 +77,52 @@ void collisionWithWindow(Ball *ball, Player *joueur1, Player *joueur2, int ballN
 int collisionWithBar(Ball *ball, Bar bar, int onTop) {
 	if (ball->state == 1) {
 		if (onTop) {
-			/* Collision avec la barre 1 */
+			/* Collision avec la barre 1 - le haut de la barre */
 			if(ball->position.y-ball->radius <= (bar.position.y + bar.longueur/2)) {
 				/* Balle au centre */
 				if(ball->position.x <= (bar.position.x + bar.largeur/4) && ball->position.x >= (bar.position.x - bar.largeur/4)) {
 					ball->vector.y *= -1;
+					ball->lastTouch = 1;
 					return 1;
 				}
 				/* Balle à droite */
 				else if(ball->position.x <= (bar.position.x + bar.largeur/2) && ball->position.x > (bar.position.x + bar.largeur/4)) { // Balle à droite de la barre
 					ball->vector.x = 0.01;
 					ball->vector.y *= -1;
+					ball->lastTouch = 1;
 					return 1;
 				}
 				/* Balle à gauche */
 				else if(ball->position.x < (bar.position.x - bar.largeur/4) && ball->position.x >= (bar.position.x - bar.largeur/2)) { // Balle à gauche de la barre
 					ball->vector.x = -0.01;
 					ball->vector.y *= -1;
+					ball->lastTouch = 1;
 					return 1;
 				}
 			}
 			return 0;
 		}
 		else {
-		/* Collision avec la barre 2 */
+		/* Collision avec la barre 2 - Le bas de la barre */
 			if(ball->position.y+ball->radius >= (bar.position.y - bar.longueur/2)) {
 				/* Balle au centre */
 				if(ball->position.x >= (bar.position.x - bar.largeur/4) && ball->position.x <= (bar.position.x + bar.largeur/4)) {
 					ball->vector.y *= -1;
+					ball->lastTouch = 2;
 					return 1;
 				}
 				/* Balle à droite */
 				else if(ball->position.x >= (bar.position.x - bar.largeur/2) && ball->position.x < (bar.position.x - bar.largeur/4)) { // Balle à droite de la barre
 					ball->vector.x = -0.01;
 					ball->vector.y *= -1;
+					ball->lastTouch = 2;
 					return 1;
 				}
 				/* Balle à gauche */
 				else if(ball->position.x > (bar.position.x + bar.largeur/4) && ball->position.x <= (bar.position.x + bar.largeur/2)) { // Balle à gauche de la barre
 					ball->vector.x = 0.01;
 					ball->vector.y *= -1;
+					ball->lastTouch = 2;
 					return 1;
 				}
 			}
@@ -222,39 +229,39 @@ int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2, Player *j
 						brick->state = 1;
 						break;
 					case 2: // Bonus 1 : agrandissement de la barre
-						if(ball->vector.y < 0) { // joueur1
+						if(ball->lastTouch == 1) { // joueur1
 							bar1->largeur += 0.2;
 						}
-						else {
+						else if (ball->lastTouch == 2){
 							bar2->largeur += 0.2;
 						}
 						brick->state = 0;
 						break;
 					case 3: // Bonus 2 : ajout d'un point de vie
-						if(ball->vector.y < 0) { // joueur1
+						if(ball->lastTouch == 1) { // joueur1
 							joueur1->life += 1;
 						}
-						else {
+						else if (ball->lastTouch == 2){
 							joueur2->life += 1;
 						}
 						brick->state = 0;
 						break;
 					case 4: // Bonus 3 : suppression d'un point de vie à l'adversaire
-						if(ball->vector.y < 0) { // joueur1
+						if(ball->lastTouch == 1) { // joueur1
 							joueur2->life -= 1;
 						}
-						else {
+						else if(ball->lastTouch == 2){
 							joueur1->life -= 1;
 						}
 						brick->state = 0;
 						break;
 					case 5: // Bonus 4 : ajout d'une 3e balle
 						ballSup->state = 1;
-						if(ball->vector.y < 0) { // joueur1
+						if(ball->lastTouch == 1) { // joueur1
 							ballSup->vector = VectorXY(PointXY(0, 0), PointXY(0, -0.007));
 							ballSup->position = PointXY(0, 0.75);
 						}
-						else {
+						else if(ball->lastTouch == 2){
 							ballSup->vector = VectorXY(PointXY(0, 0), PointXY(0, 0.007));
 							ballSup->position = PointXY(0, -0.75);
 						}
