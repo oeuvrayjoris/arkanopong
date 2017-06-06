@@ -54,7 +54,7 @@ void collisionWithWindow(Ball *ball, Player *joueur1, Player *joueur2, int ballN
 		if(ball->position.x+ball->radius >= 1 || ball->position.x-ball->radius <= -1) {
 			ball->vector.x *= -1;
 		}
-		if (ballNumber > 2) {
+		if (ballNumber > 2) { 
 			if(ball->position.y+ball->radius >= 1) {
 				joueur2->life--;
 				if (ballNumber == 1)

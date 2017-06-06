@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <math.h>
 
+// Affiche un tableau d'entier
 void affiche_tab(int *tab, int size) {
 	int count;
 	printf("{");
@@ -13,6 +14,7 @@ void affiche_tab(int *tab, int size) {
 	printf("}\n");
 }
 
+// Cette fonction mélange un tableau d'entier
 void shuffle(int *array, size_t n) {
 
 	int temp;

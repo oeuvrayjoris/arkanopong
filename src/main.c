@@ -62,6 +62,7 @@ int main(int argc, char** argv) {
 
   // Création des balles
 
+  // Vecteur et positions initiaux
   Vector initDirection_1 = VectorXY(PointXY(0, 0), PointXY(0, -0.007));
   Point initPoint_1 = PointXY(0, 0.75);
   Vector initDirection_2 = VectorXY(PointXY(0, 0), PointXY(0, 0.007));
@@ -471,10 +472,10 @@ int main(int argc, char** argv) {
 
   // Lecture du fichier et stockage dans un string
   fseek(brickFile, 0, SEEK_END);
-  input_file_size = ftell(brickFile);
+  input_file_size = ftell(brickFile); // On récupère la taille du fichier
   rewind(brickFile);
   brickFileContent = malloc(input_file_size * sizeof(char));
-  fread(brickFileContent, sizeof(char), input_file_size, brickFile);
+  fread(brickFileContent, sizeof(char), input_file_size, brickFile); // Stockage dans une variable
   fclose(brickFile);
 
   // Récupération des paramètres sur les briques
@@ -692,16 +693,13 @@ int main(int argc, char** argv) {
               glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_normal->w, image_normal->h, 0, format, GL_UNSIGNED_BYTE, image_normal->pixels);
               break;
         }
+      // Position de la brique
       Point position_brick = PointXY(brick_position_x + largeur_brick * i, brick_position_y - hauteur_brick * j);
+      // Stockage de la Brick
       tab_bricks[count] = createBrick(largeur_brick, hauteur_brick, 1, bricksType[count], texture, position_brick);
       count++;
     }
   }
-
-  //printf("-- %.3f - %.3f - %.3f\n", tab_bricks[0].position.x, myBall1.position.x+myBall1.radius - 1, tab_bricks[0].position.x - (myBall1.position.x+myBall1.radius-1) );
-
-  //printf("-- %.3f -- %.3f\n", hauteur_brick, tab_bricks[2].position.x);
-  //affiche_tab(bricksType, nb_brick_total);
 
   //************************************
   int statut = 1;
