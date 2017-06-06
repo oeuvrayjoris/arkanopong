@@ -44,9 +44,9 @@ void drawBall(Ball ball) {
 
 void collisionWithWindow(Ball *ball, Player *joueur1, Player *joueur2, int ballNumber) {
 
-	Vector initDirection_1 = VectorXY(PointXY(0, 0), PointXY(0, -0.005));
+	Vector initDirection_1 = VectorXY(PointXY(0, 0), PointXY(0, -0.007));
 	Point initPoint_1 = PointXY(0, 0.75);
-	Vector initDirection_2 = VectorXY(PointXY(0, 0), PointXY(0, 0.005));
+	Vector initDirection_2 = VectorXY(PointXY(0, 0), PointXY(0, 0.007));
 	Point initPoint_2 = PointXY(0, -0.75);
 
 	if (ball->state == 1) {
@@ -251,11 +251,11 @@ int collisionWithBrick(Ball *ball, Brick *brick, Bar *bar1, Bar *bar2, Player *j
 					case 5: // Bonus 4 : ajout d'une 3e balle
 						ballSup->state = 1;
 						if(ball->vector.y < 0) { // joueur1
-							ballSup->vector = VectorXY(PointXY(0, 0), PointXY(0, -0.005));
+							ballSup->vector = VectorXY(PointXY(0, 0), PointXY(0, -0.007));
 							ballSup->position = PointXY(0, 0.75);
 						}
 						else {
-							ballSup->vector = VectorXY(PointXY(0, 0), PointXY(0, 0.005));
+							ballSup->vector = VectorXY(PointXY(0, 0), PointXY(0, 0.007));
 							ballSup->position = PointXY(0, -0.75);
 						}
 						brick->state = 0;

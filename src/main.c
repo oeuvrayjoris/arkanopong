@@ -62,9 +62,9 @@ int main(int argc, char** argv) {
 
   // Création des balles
 
-  Vector initDirection_1 = VectorXY(PointXY(0, 0), PointXY(0, 0.0025));
+  Vector initDirection_1 = VectorXY(PointXY(0, 0), PointXY(0, -0.007));
   Point initPoint_1 = PointXY(0, 0.75);
-  Vector initDirection_2 = VectorXY(PointXY(0, 0), PointXY(0, -0.0025));
+  Vector initDirection_2 = VectorXY(PointXY(0, 0), PointXY(0, 0.007));
   Point initPoint_2 = PointXY(0, -0.75);
   float radius = 0.025;
 
@@ -828,6 +828,7 @@ int main(int argc, char** argv) {
       if(myBall1.position.x+myBall1.radius >= 1 || myBall1.position.x-myBall1.radius <= -1) {
           myBall1.vector.x *= -1;
       }
+        // Si elle sort
       if(myBall1.position.y+myBall1.radius >= 1) {
         joueur2.life--;
         myBall1 = createBall(radius, 1, 1, joueur2.color, initPoint_1, initDirection_1);
@@ -841,6 +842,7 @@ int main(int argc, char** argv) {
       if(myBall2.position.x+myBall2.radius >= 1 || myBall2.position.x-myBall2.radius <= -1) {
           myBall2.vector.x *= -1;
       }
+        // Si elle sort
       if(myBall2.position.y+myBall2.radius >= 1) {
         joueur2.life--;
         myBall2 = createBall(radius, 1, 1, joueur1.color, initPoint_2, initDirection_2);
@@ -854,6 +856,7 @@ int main(int argc, char** argv) {
       if (myBall3.state == 1) {
         if(myBall3.position.x+myBall3.radius >= 1 || myBall3.position.x-myBall3.radius <= -1)
             myBall3.vector.x *= -1;
+        // Si elle sort
         if(myBall3.position.y+myBall3.radius >= 1 || myBall3.position.y-myBall3.radius <= -1)
             myBall3.state = 0; // Desactivation de la balle 3
       }
@@ -990,6 +993,7 @@ int main(int argc, char** argv) {
       if(myBall1.position.x+myBall1.radius >= 1 || myBall1.position.x-myBall1.radius <= -1) {
           myBall1.vector.x *= -1;
       }
+        // Si elle sort
       if(myBall1.position.y+myBall1.radius >= 1) {
         joueur2.life--;
         myBall1 = createBall(radius, 1, 1, joueur2.color, initPoint_1, initDirection_1);
@@ -1002,6 +1006,7 @@ int main(int argc, char** argv) {
       if(myBall2.position.x+myBall2.radius >= 1 || myBall2.position.x-myBall2.radius <= -1) {
           myBall2.vector.x *= -1;
       }
+        // Si elle sort
       if(myBall2.position.y+myBall2.radius >= 1) {
         joueur2.life--;
         myBall2 = createBall(radius, 1, 1, joueur1.color, initPoint_2, initDirection_2);
@@ -1011,13 +1016,15 @@ int main(int argc, char** argv) {
         myBall2 = createBall(radius, 1, 1, joueur1.color, initPoint_2, initDirection_2);
       }
 
+      // Si la balle est active
       if (myBall3.state == 1) {
         // Balle 3
         if(myBall3.position.x+myBall3.radius >= 1 || myBall3.position.x-myBall3.radius <= -1) {
             myBall3.vector.x *= -1;
         }
+        // Si elle sort
         if(myBall3.position.y+myBall3.radius >= 1 || myBall3.position.y-myBall3.radius <= -1) {}
-            //myBall3.state = 0; // Desactivation de la balle 3
+            myBall3.state = 0; // Desactivation de la balle 3
       }
 
       /*
@@ -1147,6 +1154,8 @@ int main(int argc, char** argv) {
               }
               myBar1 = createBar(initBarLargeur, initBarLongueur, 1, joueur1.color, PointXY(0, -0.9));
               myBar2 = createBar(initBarLargeur, initBarLongueur, 1, joueur2.color, PointXY(0, 0.9));
+              // On mélange les types de briques dans le tableau
+              shuffle(bricksType, nb_brick_total);
               affichage = statut;
               if(affichage == 0)
                 statut = 1;
