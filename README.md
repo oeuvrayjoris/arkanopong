@@ -1,6 +1,6 @@
 # kbukxyzyxq
 
-Game development
+Arkanopong game (OpenGL)
 
 ## Setup
 
