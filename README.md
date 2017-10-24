@@ -1,6 +1,6 @@
-# kbukxyzyxq
+# Arkanopong
 
-Arkanopong game (OpenGL)
+OpenGL game.
 
 ## Setup
 
