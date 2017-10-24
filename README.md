@@ -5,8 +5,8 @@ OpenGL game.
 ## Setup
 
 ```sh
-$ git clone https://github.com/oeuvrayjoris/kbukxyzyxq.git
-$ cd kbukxyzyxq
+$ git clone https://github.com/oeuvrayjoris/arkanopong.git
+$ cd arkanopong
 $ make
 $ ./bin/play
 ```
